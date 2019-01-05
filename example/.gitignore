@@ -1,0 +1,7 @@
+node_modules
+build
+src/**.js
+.idea/*
+*.log
+
+package-lock.json

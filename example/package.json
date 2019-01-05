@@ -1,0 +1,18 @@
+{
+	"name": "example",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"dependencies": {
+		"apollo-server": "^2.3.1",
+		"graphql": "^14.0.2"
+	},
+	"devDependencies": {
+		"concurrently": "^4.1.0",
+		"nodemon": "^1.18.9"
+	},
+	"scripts": {
+		"start": "node index.js",
+		"dev": "concurrently \"cd ../ && yarn watch\" \"nodemon index.js --watch $(realpath node_modules/graphql-rate-limit)\""
+	}
+}

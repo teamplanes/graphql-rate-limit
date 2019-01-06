@@ -79,11 +79,11 @@ Add GraphQLRateLimit to your GraphQL server configuration. Example using Apollo 
 
 ```js
 const server = new ApolloServer({
-	typeDefs,
-	resolvers,
-	schemaDirectives: {
-		rateLimit: GraphQLRateLimit
-	}
+  typeDefs,
+  resolvers,
+  schemaDirectives: {
+    rateLimit: GraphQLRateLimit
+  }
 });
 ```
 

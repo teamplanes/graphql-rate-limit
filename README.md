@@ -1,6 +1,5 @@
-<p align="center">
-  <h1>💂‍♀️ GraphQL Rate Limit 💂‍♂️</h1>
-</p>
+
+<h1 align="center">💂‍♀️ GraphQL Rate Limit 💂‍♂️</h1>
 
 <p align="center">
 `graphql-rate-limit` is a directive allows you to add basic but granular rate limiting to your GraphQL API.

@@ -4,8 +4,8 @@
 
 - 💂‍♀️ Add rate limits to queries or mutations 
 - 🔑 Add filters to rate limits based on the query or mutation args
--  ❌ Custom error messaging
--  ⏰ Configure using a simple `max` per `window` arguments
+- ❌ Custom error messaging
+- ⏰ Configure using a simple `max` per `window` arguments
 - 💼 Custom stores, use Redis, Postgres, Mongo... it defaults to in-memory
 - 💪 Written in TypeScript
 
@@ -52,11 +52,17 @@ const { createRateLimitDirective } = require('graphql-rate-limit');
 import { createRateLimitDirective } from 'graphql-rate-limit';
 
 const GraphQLRateLimit = createRateLimitDirective({
-    // A function that accepts the context and returns a string that is used to identify the user.
-    identifyContext: (ctx) => {
-        return ctx.user.id; // Or could be: return ctx.req.ip;
-    },
-    store: MyCustomStore, // (optional: defaults to InMemoryStore)
-})
-
+    /**
+     * `identifyContext` is required and used to identify the user/client. The most likely cases
+     * are either using the context's request.ip, or the user ID on the context.
+     * A function that accepts the context and returns a string that is used to identify the user.
+     */
+    identifyContext: (ctx) => ctx.user.id, // Or could be something like: return ctx.req.ip;
+    /**
+     * `store` is optional as it defaults to an InMemoryStore. See the implementation of InMemoryStore if 
+     * you'd like to implement your own with your own database.
+     */
+    store: new MyCustomStore(),
+});
 ```
+

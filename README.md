@@ -1,6 +1,14 @@
+<p align="center">
 # GraphQL Rate Limit
+</p>
 
+<p align="center">
 `graphql-rate-limit` is a directive allows you to add basic but granular rate limiting to your GraphQL API.
+</p>
+
+---
+
+## Features
 
 - 💂‍♀️ Add rate limits to queries or mutations 
 - 🔑 Add filters to rate limits based on the query or mutation args
@@ -20,10 +28,10 @@ yarn add graphql-rate-limit
 
 ```graphql
 directive @rateLimit(
-    max: Int, 
-    window: Int,
-    message: String, 
-    identityArgs: [String], 
+  max: Int, 
+  window: Int,
+  message: String, 
+  identityArgs: [String], 
 ) on FIELD_DEFINITION
 
 type Query {
@@ -52,17 +60,54 @@ const { createRateLimitDirective } = require('graphql-rate-limit');
 import { createRateLimitDirective } from 'graphql-rate-limit';
 
 const GraphQLRateLimit = createRateLimitDirective({
-    /**
-     * `identifyContext` is required and used to identify the user/client. The most likely cases
-     * are either using the context's request.ip, or the user ID on the context.
-     * A function that accepts the context and returns a string that is used to identify the user.
-     */
-    identifyContext: (ctx) => ctx.user.id, // Or could be something like: return ctx.req.ip;
-    /**
-     * `store` is optional as it defaults to an InMemoryStore. See the implementation of InMemoryStore if 
-     * you'd like to implement your own with your own database.
-     */
-    store: new MyCustomStore(),
+  /**
+   * `identifyContext` is required and used to identify the user/client. The most likely cases
+   * are either using the context's request.ip, or the user ID on the context.
+   * A function that accepts the context and returns a string that is used to identify the user.
+   */
+  identifyContext: (ctx) => ctx.user.id, // Or could be something like: return ctx.req.ip;
+  /**
+   * `store` is optional as it defaults to an InMemoryStore. See the implementation of InMemoryStore if 
+   * you'd like to implement your own with your own database.
+   */
+  store: new MyCustomStore(),
 });
 ```
 
+#### Step 2.
+
+Add GraphQLRateLimit to your GraphQL server configuration. Example using Apollo Server:
+
+```js
+const server = new ApolloServer({
+	typeDefs,
+	resolvers,
+	schemaDirectives: {
+		rateLimit: GraphQLRateLimit
+	}
+});
+```
+
+#### Step 3.
+
+Use in your GraphQL Schema.
+
+```graphql
+# This must be added to the top of your schema.
+directive @rateLimit(
+  max: Int, 
+  window: Int,
+  message: String, 
+  identityArgs: [String], 
+) on FIELD_DEFINITION
+
+type Query {
+  # Limit queries to getThings to 10 per minute.
+  getThings: [Thing] @rateLimit(max: 10, window: 60000)
+}
+
+type Query {
+  # Limit attempts to login with a particular email to 10 per minute.
+  login(email: String!, password: String!): [Thing] @rateLimit(max: 10, window: 60000, identityArgs: ["email"])
+}
+```

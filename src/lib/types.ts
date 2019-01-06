@@ -1,9 +1,9 @@
 export interface Identity {
-	contextIdentity: string;
-	fieldIdentity: string;
+  readonly contextIdentity: string;
+  readonly fieldIdentity: string;
 }
 
 export interface Options {
-	readonly window: number;
-	readonly max: number;
+  readonly window: number;
+  readonly max: number;
 }

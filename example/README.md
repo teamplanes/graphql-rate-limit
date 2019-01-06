@@ -7,20 +7,20 @@ yarn start
 
 ### Develop
 
-Ensure you have `realpath` installed:
+Ensure you have `yalc` installed:
 
 ```sh
-brew install coreutils
+yarn global add yalc
 ```
 
 Link `graphql-rate-limit` to this project:
 
 ```sh
-cd .. && yarn link && cd ./example && yarn link "graphql-rate-limit"
+cd .. && yalc link && cd ./example && yalc link "graphql-rate-limit"
 ```
 
-Run in watch mode:
+Run in `example` from the root of the project:
 
 ```sh
-yarn dev
-
+cd .. && yarn example
+```

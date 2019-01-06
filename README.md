@@ -2,7 +2,7 @@
 <h1 align="center">💂‍♀️ GraphQL Rate Limit 💂‍♂️</h1>
 
 <p align="center">
-`graphql-rate-limit` is a directive allows you to add basic but granular rate limiting to your GraphQL API.
+A GraphQL directive to add basic but granular rate limiting to your Queries or Mutations.
 </p>
 
 ---
@@ -107,6 +107,6 @@ type Query {
 
 type Query {
   # Limit attempts to login with a particular email to 10 per minute.
-  login(email: String!, password: String!): [Thing] @rateLimit(max: 10, window: 60000, identityArgs: ["email"])
+  login(email: String!, password: String!): String @rateLimit(max: 10, window: 60000, identityArgs: ["email"])
 }
 ```

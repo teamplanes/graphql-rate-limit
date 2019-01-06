@@ -5,7 +5,7 @@
 	"main": "build/main/index.js",
 	"typings": "build/main/index.d.ts",
 	"module": "build/module/index.js",
-	"repository": "https://github.com/kirkness/graphql-rate-limit",
+	"repository": "https://github.com/teamplanes/graphql-rate-limit",
 	"license": "MIT",
 	"keywords": [],
 	"scripts": {
@@ -72,12 +72,8 @@
 	},
 	"ava": {
 		"failFast": true,
-		"files": [
-			"build/main/**/*.spec.js"
-		],
-		"sources": [
-			"build/main/**/*.js"
-		]
+		"files": [ "build/main/**/*.spec.js" ],
+		"sources": [ "build/main/**/*.js" ]
 	},
 	"config": {
 		"commitizen": {
@@ -88,8 +84,6 @@
 		"singleQuote": true
 	},
 	"nyc": {
-		"exclude": [
-			"**/*.spec.js"
-		]
+		"exclude": [ "**/*.spec.js" ]
 	}
 }

@@ -1,5 +1,5 @@
 <p align="center">
-# GraphQL Rate Limit
+  <h1>💂‍♀️ GraphQL Rate Limit 💂‍♂️</h1>
 </p>
 
 <p align="center">

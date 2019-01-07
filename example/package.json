@@ -6,7 +6,8 @@
 	"dependencies": {
 		"apollo-server": "^2.3.1",
 		"graphql": "^14.0.2",
-		"graphql-rate-limit": "teamplanes/graphql-rate-limit"
+		"graphql-rate-limit": "teamplanes/graphql-rate-limit",
+		"redis": "^2.8.0"
 	},
 	"devDependencies": {
 		"nodemon": "^1.18.9"

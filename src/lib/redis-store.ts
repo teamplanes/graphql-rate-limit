@@ -15,22 +15,33 @@ class RedisStore implements Store {
     identity: Identity,
     timestamps: ReadonlyArray<number>
   ): void {
-    this.store.hset(this.generateNamedSpacedKey(identity.contextIdentity), identity.fieldIdentity, JSON.stringify([...timestamps]));
+    this.store.hset(
+      this.generateNamedSpacedKey(identity.contextIdentity),
+      identity.fieldIdentity,
+      JSON.stringify([...timestamps])
+    );
   }
 
-  public async getForIdentity(identity: Identity): Promise<ReadonlyArray<number>> {
+  public async getForIdentity(
+    identity: Identity
+  ): Promise<ReadonlyArray<number>> {
     return new Promise<ReadonlyArray<number>>((res, rej) => {
-      this.store.hgetall(this.generateNamedSpacedKey(identity.contextIdentity), (err: Error | null, obj: any) => {
-        if (err) { return rej(err); }
-        const existingValue = (obj && obj[identity.fieldIdentity]);
-        res(existingValue ? JSON.parse(existingValue) : [])
-      })
+      this.store.hgetall(
+        this.generateNamedSpacedKey(identity.contextIdentity),
+        (err: Error | null, obj: any) => {
+          if (err) {
+            return rej(err);
+          }
+          const existingValue = obj && obj[identity.fieldIdentity];
+          res(existingValue ? JSON.parse(existingValue) : []);
+        }
+      );
     });
   }
 
   private readonly generateNamedSpacedKey = (key: string): string => {
-    return `${this.nameSpacedKeyPrefix}${key}`
-  }
+    return `${this.nameSpacedKeyPrefix}${key}`;
+  };
 }
 
 export { RedisStore };

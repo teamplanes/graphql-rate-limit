@@ -113,7 +113,7 @@ type Query {
 
 ### Redis Store usage
 
-It is recommended for bigger applications to use a store instead of relying on servers memory. 
+It is recommended to use a persistent store rather than the default InMemoryStore. 
 GraphQLRateLimit supports Redis. You need to install Redis in your project first. 
 
 ```js

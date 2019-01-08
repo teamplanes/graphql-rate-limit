@@ -25,7 +25,6 @@
     "cov:html": "nyc report --reporter=html",
     "cov:send": "nyc report --reporter=lcov > coverage.lcov && codecov",
     "cov:check": "nyc report && nyc check-coverage --lines 100 --functions 100 --branches 100",
-    "version": "standard-version",
     "reset": "git clean -dfx && git reset --hard && npm i",
     "clean": "trash build test",
     "all": "run-s reset test cov:check doc:html",
@@ -39,8 +38,7 @@
     "watch": "Watch and rebuild the project on save, then rerun relevant tests",
     "cov": "Rebuild, run tests, then create and open the coverage report",
     "version": "Bump package.json version, update CHANGELOG.md, tag release",
-    "reset": "Delete all untracked files and reset the repo to the last commit",
-    "prepare-release": "One-step: clean, build, test, publish docs, and prep a release"
+    "reset": "Delete all untracked files and reset the repo to the last commit"
   },
   "engines": {
     "node": ">=8.9"

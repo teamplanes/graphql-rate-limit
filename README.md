@@ -110,3 +110,22 @@ type Query {
   login(email: String!, password: String!): String @rateLimit(max: 10, window: 60000, identityArgs: ["email"])
 }
 ```
+
+### Redis Store usage
+
+It is recommended to use a persistent store rather than the default InMemoryStore. 
+GraphQLRateLimit supports Redis. You need to install Redis in your project first. 
+
+```js
+import * as graphqlRateLimit from 'graphql-rate-limit';
+
+const GraphQLRateLimit = graphqlRateLimit.createRateLimitDirective({
+  identifyContext: ctx => ctx.user.id,
+  /**
+   * Import the class from graphql-rate-limit and pass in an instance of redis client to the constructor
+   */
+  store: new graphqlRateLimit.RedisStore(redis.createClient())
+});
+```
+
+

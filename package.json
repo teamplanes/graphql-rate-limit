@@ -43,7 +43,6 @@
     "node": ">=8.9"
   },
   "dependencies": {
-    "@types/redis": "^2.8.10",
     "@types/redis-mock": "^0.17.0",
     "graphql-tools": "^4.0.3"
   },
@@ -61,7 +60,6 @@
     "nyc": "^13.1.0",
     "opn-cli": "^4.0.0",
     "prettier": "^1.15.2",
-    "redis": "^2.8.0",
     "redis-mock": "^0.42.0",
     "standard-version": "^4.4.0",
     "trash-cli": "^1.4.0",

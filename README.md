@@ -122,7 +122,7 @@ import * as graphqlRateLimit from 'graphql-rate-limit';
 const GraphQLRateLimit = graphqlRateLimit.createRateLimitDirective({
   identifyContext: ctx => ctx.user.id,
   /**
-   * Import the class from graphqlRateLimit and pass in an instance of redis store
+   * Import the class from graphql-rate-limit and pass in an instance of redis client to the constructor
    */
   store: new graphqlRateLimit.RedisStore(redis.createClient())
 });

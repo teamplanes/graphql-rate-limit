@@ -1,13 +1,12 @@
-import { RedisClient } from 'redis';
 import { Store } from './store';
 import { Identity } from './types';
 
 class RedisStore implements Store {
   // tslint:disable-next-line readonly-keyword
-  public store: RedisClient;
+  public store: any;
   private readonly nameSpacedKeyPrefix: string = 'redis-store-id::';
 
-  constructor(redisStoreInstance: RedisClient) {
+  constructor(redisStoreInstance: any) {
     this.store = redisStoreInstance;
   }
 

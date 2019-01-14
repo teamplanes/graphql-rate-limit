@@ -5,7 +5,7 @@ import {
   GraphQLField,
   GraphQLInt,
   GraphQLList,
-  GraphQLString,
+  GraphQLString
 } from 'graphql';
 import ms from 'ms';
 import { SchemaDirectiveVisitor } from 'graphql-tools';

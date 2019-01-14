@@ -6,7 +6,6 @@ import {
   GraphQLInt,
   GraphQLList,
   GraphQLString,
-  GraphQLUnionType,
 } from 'graphql';
 import ms from 'ms';
 import { SchemaDirectiveVisitor } from 'graphql-tools';
@@ -28,7 +27,7 @@ export interface GraphQLRateLimitDirectiveArgs {
   /**
    * Window duration in millis.
    */
-  readonly window?: number;
+  readonly window?: string;
   /**
    * Max number of calls within the `window` duration.
    */
@@ -156,19 +155,13 @@ const createRateLimitDirective = (
             type: new GraphQLList(GraphQLString)
           },
           max: {
-            type: new GraphQLUnionType({
-              name: 'max',
-              types: [GraphQLInt, GraphQLString]
-            })
+            type: GraphQLInt
           },
           message: {
             type: GraphQLString
           },
           window: {
-            type: new GraphQLUnionType({
-              name: 'window',
-              types: [GraphQLInt, GraphQLString]
-            })
+            type: GraphQLString
           }
         },
         locations: [DirectiveLocation.FIELD_DEFINITION],
@@ -187,7 +180,6 @@ const createRateLimitDirective = (
         let window = this.args.window || DEFAULT_WINDOW;
         let max = this.args.max || DEFAULT_MAX;
         if (typeof window !== 'number') window = ms(window);
-        if (typeof max !== 'number') max = ms(max);
         const identityArgs =
           this.args.identityArgs || DEFAULT_FIELD_IDENTITY_ARGS;
         const fieldIdentity = getFieldIdentity(name, identityArgs, resolveArgs);

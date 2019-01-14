@@ -70,6 +70,13 @@ const GraphQLRateLimit = createRateLimitDirective({
    * you'd like to implement your own with your own database.
    */
   store: new MyCustomStore(),
+  /**
+   * Generate a custom error message. Note that the `message` passed in to the directive will be used 
+   * if its set.
+   */
+  formatError: ({ fieldName }) => {
+    return `Woah there, you are doing way too much ${fieldName}`
+  }
 });
 ```
 

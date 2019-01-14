@@ -35,6 +35,15 @@ export interface GraphQLRateLimitDirectiveArgs {
    * Values to build into the key used to identify the resolve call.
    */
   readonly identityArgs?: ReadonlyArray<string>;
+
+}
+
+export interface FormatErrorInput {
+  readonly field: string;
+  readonly contextIdentity: string;
+  readonly max: number;
+  readonly window: number;
+  readonly fieldIdentity?: string;
 }
 
 /**
@@ -55,6 +64,10 @@ export interface GraphQLRateLimitConfig {
    * 	identifyContext: (context) => context.req.ip;
    */
   readonly identifyContext?: (context: any) => string;
+  /**
+   * Custom error messages.
+   */
+  readonly formatError?: (input: FormatErrorInput) => string;
 }
 
 // Default directive config
@@ -163,11 +176,13 @@ const createRateLimitDirective = (
         const contextIdentity = config.identifyContext(context);
         const window = this.args.window || DEFAULT_WINDOW;
         const max = this.args.max || DEFAULT_MAX;
-        const message =
-          this.args.message || `You are trying to access '${name}' too often`;
         const identityArgs =
           this.args.identityArgs || DEFAULT_FIELD_IDENTITY_ARGS;
         const fieldIdentity = getFieldIdentity(name, identityArgs, resolveArgs);
+        const message =
+          this.args.message
+          || (this.args.formatError && this.args.formatError({ field: name, fieldIdentity, max, window, contextIdentity }))
+          || `You are trying to access '${name}' too often'`;
 
         const isExceedingMax = await validateResolve(
           config.store,

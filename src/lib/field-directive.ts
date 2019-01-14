@@ -5,8 +5,10 @@ import {
   GraphQLField,
   GraphQLInt,
   GraphQLList,
-  GraphQLString
+  GraphQLString,
+  GraphQLUnionType,
 } from 'graphql';
+import ms from 'ms';
 import { SchemaDirectiveVisitor } from 'graphql-tools';
 import { InMemoryStore } from './in-memory-store';
 import { RateLimitError } from './rate-limit-error';
@@ -154,13 +156,19 @@ const createRateLimitDirective = (
             type: new GraphQLList(GraphQLString)
           },
           max: {
-            type: GraphQLInt
+            type: new GraphQLUnionType({
+              name: 'max',
+              types: [GraphQLInt, GraphQLString]
+            })
           },
           message: {
             type: GraphQLString
           },
           window: {
-            type: GraphQLInt
+            type: new GraphQLUnionType({
+              name: 'window',
+              types: [GraphQLInt, GraphQLString]
+            })
           }
         },
         locations: [DirectiveLocation.FIELD_DEFINITION],
@@ -176,8 +184,10 @@ const createRateLimitDirective = (
       field.resolve = async (...args) => {
         const [, resolveArgs, context] = args;
         const contextIdentity = config.identifyContext(context);
-        const window = this.args.window || DEFAULT_WINDOW;
-        const max = this.args.max || DEFAULT_MAX;
+        let window = this.args.window || DEFAULT_WINDOW;
+        let max = this.args.max || DEFAULT_MAX;
+        if (typeof window !== 'number') window = ms(window);
+        if (typeof max !== 'number') max = ms(max);
         const identityArgs =
           this.args.identityArgs || DEFAULT_FIELD_IDENTITY_ARGS;
         const fieldIdentity = getFieldIdentity(name, identityArgs, resolveArgs);

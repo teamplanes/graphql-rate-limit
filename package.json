@@ -44,7 +44,8 @@
   },
   "dependencies": {
     "@types/redis-mock": "^0.17.0",
-    "graphql-tools": "^4.0.3"
+    "graphql-tools": "^4.0.3",
+    "ms": "^2.1.1"
   },
   "peerDependencies": {
     "graphql": "*"

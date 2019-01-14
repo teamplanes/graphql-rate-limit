@@ -7,8 +7,8 @@ import {
   GraphQLList,
   GraphQLString
 } from 'graphql';
-import ms from 'ms';
 import { SchemaDirectiveVisitor } from 'graphql-tools';
+import ms from 'ms';
 import { InMemoryStore } from './in-memory-store';
 import { RateLimitError } from './rate-limit-error';
 import { Store } from './store';
@@ -179,7 +179,9 @@ const createRateLimitDirective = (
         const contextIdentity = config.identifyContext(context);
         const max = this.args.max || DEFAULT_MAX;
         let window = this.args.window || DEFAULT_WINDOW;
-        if (typeof window !== 'number') window = ms(window);
+        if (typeof window !== 'number') {
+          window = ms(window);
+        }
         const identityArgs =
           this.args.identityArgs || DEFAULT_FIELD_IDENTITY_ARGS;
         const fieldIdentity = getFieldIdentity(name, identityArgs, resolveArgs);
@@ -190,7 +192,7 @@ const createRateLimitDirective = (
             fieldIdentity,
             fieldName: name,
             max,
-            window,
+            window
           });
 
         const isExceedingMax = await validateResolve(

@@ -13,7 +13,6 @@
     // Immutability rules
     "readonly-keyword": true,
     "readonly-array": true,
-    "no-let": true,
     "no-object-mutation": true,
     "no-delete": true,
     "no-method-signature": true

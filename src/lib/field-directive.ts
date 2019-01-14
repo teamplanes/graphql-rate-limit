@@ -164,7 +164,7 @@ const createRateLimitDirective = (
         const window = this.args.window || DEFAULT_WINDOW;
         const max = this.args.max || DEFAULT_MAX;
         const message =
-          this.args.message || `You are trying to access '${name}' too often'`;
+          this.args.message || `You are trying to access '${name}' too often`;
         const identityArgs =
           this.args.identityArgs || DEFAULT_FIELD_IDENTITY_ARGS;
         const fieldIdentity = getFieldIdentity(name, identityArgs, resolveArgs);

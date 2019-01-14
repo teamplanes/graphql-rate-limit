@@ -7,6 +7,7 @@ import {
   GraphQLList,
   GraphQLString
 } from 'graphql';
+import ms from 'ms';
 import { SchemaDirectiveVisitor } from 'graphql-tools';
 import { InMemoryStore } from './in-memory-store';
 import { RateLimitError } from './rate-limit-error';
@@ -26,7 +27,7 @@ export interface GraphQLRateLimitDirectiveArgs {
   /**
    * Window duration in millis.
    */
-  readonly window?: number;
+  readonly window?: string;
   /**
    * Max number of calls within the `window` duration.
    */
@@ -160,7 +161,7 @@ const createRateLimitDirective = (
             type: GraphQLString
           },
           window: {
-            type: GraphQLInt
+            type: GraphQLString
           }
         },
         locations: [DirectiveLocation.FIELD_DEFINITION],
@@ -176,8 +177,9 @@ const createRateLimitDirective = (
       field.resolve = async (...args) => {
         const [, resolveArgs, context] = args;
         const contextIdentity = config.identifyContext(context);
-        const window = this.args.window || DEFAULT_WINDOW;
         const max = this.args.max || DEFAULT_MAX;
+        let window = this.args.window || DEFAULT_WINDOW;
+        if (typeof window !== 'number') window = ms(window);
         const identityArgs =
           this.args.identityArgs || DEFAULT_FIELD_IDENTITY_ARGS;
         const fieldIdentity = getFieldIdentity(name, identityArgs, resolveArgs);

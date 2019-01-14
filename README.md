@@ -28,14 +28,14 @@ yarn add graphql-rate-limit
 ```graphql
 directive @rateLimit(
   max: Int, 
-  window: Int,
+  window: String,
   message: String, 
   identityArgs: [String], 
 ) on FIELD_DEFINITION
 
 type Query {
   # Rate limit to 5 per second
-  getItems: [Item] @rateLimit(window: 1000, max: 5)
+  getItems: [Item] @rateLimit(window: "1s", max: 5)
 
   # Rate limit access per item ID
   getItem(id: ID!): Item @rateLimit(identityArgs: ["id"])
@@ -102,21 +102,23 @@ Use in your GraphQL Schema.
 # This must be added to the top of your schema.
 directive @rateLimit(
   max: Int, 
-  window: Int,
+  window: String,
   message: String, 
   identityArgs: [String], 
 ) on FIELD_DEFINITION
 
 type Query {
   # Limit queries to getThings to 10 per minute.
-  getThings: [Thing] @rateLimit(max: 10, window: 60000)
+  getThings: [Thing] @rateLimit(max: 10, window: "6s")
 }
 
 type Query {
-  # Limit attempts to login with a particular email to 10 per minute.
-  login(email: String!, password: String!): String @rateLimit(max: 10, window: 60000, identityArgs: ["email"])
+  # Limit attempts to login with a particular email to 10 per 2 hours.
+  login(email: String!, password: String!): String @rateLimit(max: 10, window: "2h", identityArgs: ["email"])
 }
 ```
+
+**Note:** We use Zeit's `ms` to parse the `window` arg, [docs here](https://github.com/zeit/ms).
 
 ### Redis Store usage
 

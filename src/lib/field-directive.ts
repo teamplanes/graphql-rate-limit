@@ -177,8 +177,8 @@ const createRateLimitDirective = (
       field.resolve = async (...args) => {
         const [, resolveArgs, context] = args;
         const contextIdentity = config.identifyContext(context);
+        const max = this.args.max || DEFAULT_MAX;
         let window = this.args.window || DEFAULT_WINDOW;
-        let max = this.args.max || DEFAULT_MAX;
         if (typeof window !== 'number') window = ms(window);
         const identityArgs =
           this.args.identityArgs || DEFAULT_FIELD_IDENTITY_ARGS;

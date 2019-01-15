@@ -20,14 +20,12 @@ class RedisStore implements Store {
         ? ['EX', (Date.now() + windowMs - Math.max(...timestamps)) / 1000]
         : [];
       this.store.set(
-        // @ts-ignore
         [
           this.generateNamedSpacedKey(identity),
           JSON.stringify([...timestamps]),
           ...expiry
         ],
-        // @ts-ignore
-        err => {
+        (err: Error | null) => {
           if (err) {
             return rej(err);
           }

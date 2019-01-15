@@ -43,8 +43,10 @@
     "node": ">=8.9"
   },
   "dependencies": {
+    "@types/lodash.get": "^4.4.4",
     "@types/redis-mock": "^0.17.0",
     "graphql-tools": "^4.0.3",
+    "lodash.get": "^4.4.2",
     "ms": "^2.1.1"
   },
   "peerDependencies": {

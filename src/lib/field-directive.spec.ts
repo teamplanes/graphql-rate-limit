@@ -42,14 +42,14 @@ test('validateResolve with an empty store', async t => {
     await validateResolve(
       new InMemoryStore(),
       { contextIdentity: '1', fieldIdentity: 'myField' },
-      { max: 1, window: 1000 }
+      { max: 1, windowMs: 1000 }
     )
   );
   t.true(
     await validateResolve(
       new InMemoryStore(),
       { contextIdentity: '1', fieldIdentity: 'myField' },
-      { max: 0, window: 1000 }
+      { max: 0, windowMs: 1000 }
     )
   );
 });
@@ -64,14 +64,14 @@ test('validateResolve should return true for full stores', async t => {
     await validateResolve(
       store,
       { contextIdentity: '1', fieldIdentity: 'myField' },
-      { max: 1, window: 1000 }
+      { max: 1, windowMs: 1000 }
     )
   );
   t.false(
     await validateResolve(
       store,
       { contextIdentity: '1', fieldIdentity: 'myField' },
-      { max: 4, window: 1000 }
+      { max: 4, windowMs: 1000 }
     )
   );
 });

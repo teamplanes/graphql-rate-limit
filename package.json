@@ -43,6 +43,7 @@
     "node": ">=8.9"
   },
   "dependencies": {
+    "@types/redis": "^2.8.10",
     "@types/redis-mock": "^0.17.0",
     "graphql-tools": "^4.0.3",
     "ms": "^2.1.1"

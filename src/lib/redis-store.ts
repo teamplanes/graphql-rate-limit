@@ -1,3 +1,4 @@
+import { RedisClient } from 'redis';
 import { Store } from './store';
 import { Identity } from './types';
 
@@ -13,26 +14,34 @@ class RedisStore implements Store {
   public setForIdentity(
     identity: Identity,
     timestamps: ReadonlyArray<number>
-  ): void {
-    this.store.hset(
-      this.generateNamedSpacedKey(identity.contextIdentity),
-      identity.fieldIdentity,
-      JSON.stringify([...timestamps])
-    );
+  ): Promise<void> {
+    return new Promise<void>((res, rej) => {
+      (this.store as RedisClient).hset(
+        this.generateNamedSpacedKey(identity.contextIdentity),
+        identity.fieldIdentity,
+        JSON.stringify([...timestamps]),
+        err => {
+          if (err) {
+            return rej(err);
+          }
+          res();
+        }
+      );
+    });
   }
 
   public async getForIdentity(
     identity: Identity
   ): Promise<ReadonlyArray<number>> {
     return new Promise<ReadonlyArray<number>>((res, rej) => {
-      this.store.hgetall(
+      (this.store as RedisClient).hget(
         this.generateNamedSpacedKey(identity.contextIdentity),
+        identity.fieldIdentity,
         (err: Error | null, obj: any) => {
           if (err) {
             return rej(err);
           }
-          const existingValue = obj && obj[identity.fieldIdentity];
-          res(existingValue ? JSON.parse(existingValue) : []);
+          res(obj ? JSON.parse(obj) : []);
         }
       );
     });

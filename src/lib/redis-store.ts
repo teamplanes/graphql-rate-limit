@@ -1,4 +1,3 @@
-import { RedisClient } from 'redis';
 import { Store } from './store';
 import { Identity } from './types';
 
@@ -13,13 +12,21 @@ class RedisStore implements Store {
 
   public setForIdentity(
     identity: Identity,
-    timestamps: ReadonlyArray<number>
+    timestamps: ReadonlyArray<number>,
+    windowMs?: number
   ): Promise<void> {
     return new Promise<void>((res, rej) => {
-      (this.store as RedisClient).hset(
-        this.generateNamedSpacedKey(identity.contextIdentity),
-        identity.fieldIdentity,
-        JSON.stringify([...timestamps]),
+      const expiry = windowMs
+        ? ['EX', (Date.now() + windowMs - Math.max(...timestamps)) / 1000]
+        : [];
+      this.store.set(
+        // @ts-ignore
+        [
+          this.generateNamedSpacedKey(identity),
+          JSON.stringify([...timestamps]),
+          ...expiry
+        ],
+        // @ts-ignore
         err => {
           if (err) {
             return rej(err);
@@ -34,9 +41,8 @@ class RedisStore implements Store {
     identity: Identity
   ): Promise<ReadonlyArray<number>> {
     return new Promise<ReadonlyArray<number>>((res, rej) => {
-      (this.store as RedisClient).hget(
-        this.generateNamedSpacedKey(identity.contextIdentity),
-        identity.fieldIdentity,
+      this.store.get(
+        this.generateNamedSpacedKey(identity),
         (err: Error | null, obj: any) => {
           if (err) {
             return rej(err);
@@ -47,8 +53,10 @@ class RedisStore implements Store {
     });
   }
 
-  private readonly generateNamedSpacedKey = (key: string): string => {
-    return `${this.nameSpacedKeyPrefix}${key}`;
+  private readonly generateNamedSpacedKey = (identity: Identity): string => {
+    return `${this.nameSpacedKeyPrefix}${identity.contextIdentity}:${
+      identity.fieldIdentity
+    }`;
   };
 }
 

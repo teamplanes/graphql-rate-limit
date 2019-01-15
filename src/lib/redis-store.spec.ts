@@ -33,6 +33,7 @@ test('RedisStore sets and gets correct timestamps', async t => {
     { contextIdentity: 'foo', fieldIdentity: 'bar' },
     [10, 20]
   );
+  await new Promise(res => setTimeout(res, 2000));
   t.deepEqual(
     await storeInstance.getForIdentity({
       contextIdentity: 'foo',

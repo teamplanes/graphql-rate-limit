@@ -44,6 +44,9 @@ type Query {
 type Mutation {
   # Rate limit with a custom error message
   createItem(title: String!): Item @rateLimit(message: "You are doing that too often.")
+
+  # Rate limit access per item.id
+  updateItem(item: Item!): Item @rateLimit(identityArgs: ["item.id"])
 }
 ```
 
@@ -118,22 +121,37 @@ type Query {
 }
 ```
 
-**Note:** We use Zeit's `ms` to parse the `window` arg, [docs here](https://github.com/zeit/ms).
+## Directive args
 
-### Redis Store usage
+#### `window`
 
-It is recommended to use a persistent store rather than the default InMemoryStore. 
-GraphQLRateLimit supports Redis. You need to install Redis in your project first. 
+Specify a time interval window that the `max` number of requests can access the field. We use Zeit's `ms` to parse the `window` arg, [docs here](https://github.com/zeit/ms).
+
+#### `max`
+
+Define the max number of calls to the given field per `window`.
+
+#### `identityArgs`
+
+If you wanted to limit the requests to a field per id, per user, use `identityArgs` to define how the request should be identified. For example you'd provide just `["id"]` if you wanted to rate limit the access to a field by `id`. We use Lodash's `get` to access nested identity args, [docs here](https://lodash.com/docs/4.17.11#get).
+
+#### `message`
+
+A custom message per field. Note you can also use `formatError` to customise the default error message if you don't want to define a single message per rate limited field.
+
+## Redis Store Usage
+
+It is recommended to use a persistent store rather than the default InMemoryStore. GraphQLRateLimit currently supports Redis as an alternative. You'll need to install Redis in your project first. 
 
 ```js
-import * as graphqlRateLimit from 'graphql-rate-limit';
+import { createRateLimitDirective, RedisStore } from 'graphql-rate-limit';
 
-const GraphQLRateLimit = graphqlRateLimit.createRateLimitDirective({
+const GraphQLRateLimit = createRateLimitDirective({
   identifyContext: ctx => ctx.user.id,
   /**
    * Import the class from graphql-rate-limit and pass in an instance of redis client to the constructor
    */
-  store: new graphqlRateLimit.RedisStore(redis.createClient())
+  store: new RedisStore(redis.createClient())
 });
 ```
 

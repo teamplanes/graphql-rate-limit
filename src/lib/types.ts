@@ -4,6 +4,6 @@ export interface Identity {
 }
 
 export interface Options {
-  readonly window: number;
+  readonly windowMs: number;
   readonly max: number;
 }

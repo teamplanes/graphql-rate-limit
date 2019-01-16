@@ -128,10 +128,14 @@ const validateResolve = async (
   const filteredAccessTimestamps: ReadonlyArray<any> = [
     Date.now(),
     ...accessTimestamps.filter(timestamp => {
-      return timestamp + options.window > Date.now();
+      return timestamp + options.windowMs > Date.now();
     })
   ];
-  await store.setForIdentity(identity, filteredAccessTimestamps);
+  await store.setForIdentity(
+    identity,
+    filteredAccessTimestamps,
+    options.windowMs
+  );
   return filteredAccessTimestamps.length > options.max;
 };
 
@@ -178,10 +182,9 @@ const createRateLimitDirective = (
         const [, resolveArgs, context] = args;
         const contextIdentity = config.identifyContext(context);
         const max = this.args.max || DEFAULT_MAX;
-        let window = this.args.window || DEFAULT_WINDOW;
-        if (typeof window !== 'number') {
-          window = ms(window);
-        }
+        const windowMs = (this.args.window
+          ? ms(this.args.window)
+          : DEFAULT_WINDOW) as number;
         const identityArgs =
           this.args.identityArgs || DEFAULT_FIELD_IDENTITY_ARGS;
         const fieldIdentity = getFieldIdentity(name, identityArgs, resolveArgs);
@@ -192,13 +195,13 @@ const createRateLimitDirective = (
             fieldIdentity,
             fieldName: name,
             max,
-            window
+            window: windowMs
           });
 
         const isExceedingMax = await validateResolve(
           config.store,
           { contextIdentity, fieldIdentity },
-          { window, max }
+          { windowMs, max }
         );
 
         if (isExceedingMax) {

@@ -37,6 +37,26 @@ test('getFieldIdentity with identity args', t => {
   );
 });
 
+test('getFieldIdentity with nested identity args', t => {
+  t.is(
+    getFieldIdentity('myField', ['item.id'], { item: { id: 2 }, name: 'Foo' }),
+    'myField:2'
+  );
+  t.is(
+    getFieldIdentity('myField', ['item.foo'], { item: { id: 2 }, name: 'Foo' }),
+    'myField:'
+  );
+
+  const obj = { item: { subItem: { id: 9 } }, name: 'Foo' };
+  t.is(getFieldIdentity('myField', ['item.subItem.id'], obj), 'myField:9');
+
+  const objTwo = { item: { subItem: { id: 1 } }, name: 'Foo' };
+  t.is(
+    getFieldIdentity('myField', ['name', 'item.subItem.id'], objTwo),
+    'myField:Foo:1'
+  );
+});
+
 test('validateResolve with an empty store', async t => {
   t.false(
     await validateResolve(

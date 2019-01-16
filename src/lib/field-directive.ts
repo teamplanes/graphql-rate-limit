@@ -8,6 +8,7 @@ import {
   GraphQLString
 } from 'graphql';
 import { SchemaDirectiveVisitor } from 'graphql-tools';
+import get from 'lodash.get';
 import ms from 'ms';
 import { InMemoryStore } from './in-memory-store';
 import { RateLimitError } from './rate-limit-error';
@@ -106,7 +107,7 @@ const getFieldIdentity = (
   identityArgs: ReadonlyArray<string>,
   resolveArgs: any
 ) => {
-  const argsKey = identityArgs.map(arg => resolveArgs[arg]);
+  const argsKey = identityArgs.map(arg => get(resolveArgs, arg));
   return [fieldName, ...argsKey].join(':');
 };
 

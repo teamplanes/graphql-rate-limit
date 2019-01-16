@@ -45,6 +45,7 @@
   "dependencies": {
     "@types/redis-mock": "^0.17.0",
     "graphql-tools": "^4.0.3",
+    "lodash.get": "^4.4.2",
     "ms": "^2.1.1"
   },
   "peerDependencies": {
@@ -52,6 +53,7 @@
   },
   "devDependencies": {
     "@types/graphql": "^14.0.4",
+    "@types/lodash.get": "^4.4.4",
     "@types/ms": "^0.7.30",
     "ava": "1.0.0-beta.7",
     "codecov": "^3.1.0",

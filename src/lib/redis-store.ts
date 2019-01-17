@@ -17,7 +17,10 @@ class RedisStore implements Store {
   ): Promise<void> {
     return new Promise<void>((res, rej) => {
       const expiry = windowMs
-        ? ['EX', (Date.now() + windowMs - Math.max(...timestamps)) / 1000]
+        ? [
+            'EX',
+            Math.ceil((Date.now() + windowMs - Math.max(...timestamps)) / 1000)
+          ]
         : [];
       this.store.set(
         [

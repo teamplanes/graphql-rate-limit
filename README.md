@@ -97,6 +97,21 @@ const server = new ApolloServer({
 });
 ```
 
+**Note:** If you are calling `makeExecutableSchema` directly and passing in the `schema` key to ApolloServer or similar, you should do the following:
+
+```js
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers
+  schemaDirectives: {
+    rateLimit: GraphQLRateLimit
+  }
+});
+
+const graphql = new ApolloServer({ schema });
+```
+
+
 #### Step 3.
 
 Use in your GraphQL Schema.

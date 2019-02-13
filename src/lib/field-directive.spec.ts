@@ -95,3 +95,21 @@ test('validateResolve should return true for full stores', async t => {
     )
   );
 });
+
+test('validateResolve should add callCount timestamps', async t => {
+  const store = new InMemoryStore();
+  t.false(await validateResolve(store, { contextIdentity: '1', fieldIdentity: 'myField' }, {
+    callCount: 2,
+    max: 2,
+    windowMs: 1000
+  }));
+})
+
+test('validateResolve should return true when callCount is bigger than max', async t => {
+  const store = new InMemoryStore();
+  t.true(await validateResolve(store, { contextIdentity: '1', fieldIdentity: 'myField' }, {
+    callCount: 2,
+    max: 1,
+    windowMs: 1000
+  }));
+})

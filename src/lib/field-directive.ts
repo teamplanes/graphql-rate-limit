@@ -199,7 +199,7 @@ const createRateLimitDirective = (
         const identityArgs =
           this.args.identityArgs || DEFAULT_FIELD_IDENTITY_ARGS;
         const fieldIdentity = getFieldIdentity(name, identityArgs, resolveArgs);
-        const callCount = this.args.arrayLength ? (resolveArgs[this.args.arrayLength] ? resolveArgs[this.args.arrayLength].length : 1) : 1;
+        const callCount = this.args.arrayLength ? (resolveArgs[this.args.arrayLength] ? (resolveArgs[this.args.arrayLength].length || 1) : 1) : 1;
         const message =
           this.args.message ||
           config.formatError({

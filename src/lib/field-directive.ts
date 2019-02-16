@@ -40,7 +40,7 @@ export interface GraphQLRateLimitDirectiveArgs {
   /**
    * Limit by the length of an input array
    */
-  readonly arrayLength?: string;
+  readonly arrayLengthField?: string;
 }
 
 export interface FormatErrorInput {
@@ -132,7 +132,9 @@ const validateResolve = async (
   const accessTimestamps = await store.getForIdentity(identity);
   // Create an array of callCount length, filled with the current timestamp
   const timestamp = Date.now();
-  const newTimestamps = [...new Array(options.callCount || 1)].map(() => timestamp);
+  const newTimestamps = [...new Array(options.callCount || 1)].map(
+    () => timestamp
+  );
   const filteredAccessTimestamps: ReadonlyArray<any> = [
     ...newTimestamps,
     ...accessTimestamps.filter(t => {
@@ -163,8 +165,8 @@ const createRateLimitDirective = (
     ): GraphQLDirective {
       return new GraphQLDirective({
         args: {
-          arrayLength: {
-            type: GraphQLString,
+          arrayLengthField: {
+            type: GraphQLString
           },
           identityArgs: {
             type: new GraphQLList(GraphQLString)
@@ -199,7 +201,8 @@ const createRateLimitDirective = (
         const identityArgs =
           this.args.identityArgs || DEFAULT_FIELD_IDENTITY_ARGS;
         const fieldIdentity = getFieldIdentity(name, identityArgs, resolveArgs);
-        const callCount = this.args.arrayLength ? (resolveArgs[this.args.arrayLength] ? (resolveArgs[this.args.arrayLength].length || 1) : 1) : 1;
+        const callCount =
+          get(resolveArgs, [this.args.arrayLengthField, 'length']) || 1;
         const message =
           this.args.message ||
           config.formatError({

@@ -14,7 +14,7 @@ const books = [
 ];
 
 const typeDefs = gql`
-	directive @rateLimit(message: String, identityArgs: [String], max: Int, window: String) on FIELD_DEFINITION
+	directive @rateLimit(message: String, identityArgs: [String], arrayLengthField: String, max: Int, window: String) on FIELD_DEFINITION
 
 	type Book {
 		title: String
@@ -27,6 +27,7 @@ const typeDefs = gql`
 
 	type Mutation {
 		createBook(title: String!, author: String!): Book @rateLimit(identityArgs: ["title"], max: 2, window: "10s")
+    deleteBooks(titles: [String]!): Book @rateLimit(identityArgs: ["title"], arrayLengthField: "titles", max: 4, window: "10s")
 	}
 `;
 
@@ -37,7 +38,10 @@ const resolvers = {
 	Mutation: {
 		createBook: (_, args) => {
 			books.push(args);
-			return args;
+      return args;
+    },
+    deleteBooks: () => {
+			return books[0];
 		}
 	}
 };

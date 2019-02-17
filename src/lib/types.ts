@@ -6,4 +6,5 @@ export interface Identity {
 export interface Options {
   readonly windowMs: number;
   readonly max: number;
+  readonly callCount?: number;
 }

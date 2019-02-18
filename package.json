@@ -1,6 +1,6 @@
 {
   "name": "graphql-rate-limit",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "A GraphQL Directive to Rate Limit Queries or Mutations 💂‍♀",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",

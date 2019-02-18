@@ -31,6 +31,7 @@ directive @rateLimit(
   window: String,
   message: String, 
   identityArgs: [String], 
+  fieldArrayLength: String
 ) on FIELD_DEFINITION
 
 type Query {
@@ -47,6 +48,13 @@ type Mutation {
 
   # Rate limit access per item.id
   updateItem(item: Item!): Item @rateLimit(identityArgs: ["item.id"])
+
+  # Limit attempts to createSomethings by 2 every 2 hours.
+  # createSomethings(things: ["thing 1", "thing 2"])
+  # or
+  # createSomethings(things: ["thing 1"])
+  # createSomethings(things: ["thing 2"])
+  createSomethings(things: [String]): [Thing] @rateLimit(max: 2, window: "2h", fieldArrayLength: "things")
 }
 ```
 
@@ -134,13 +142,6 @@ type Query {
 type Query {
   # Limit attempts to login with a particular email to 10 per 2 hours.
   login(email: String!, password: String!): String @rateLimit(max: 10, window: "2h", identityArgs: ["email"])
-
-  # Limit attempts to createSomethings by 2 every 2 hours.
-  # createSomethings(things: ["thing 1", "thing 2"])
-  # or
-  # createSomethings(things: ["thing 1"])
-  # createSomethings(things: ["thing 2"])
-  createSomethings(things: [String]): [Thing] @rateLimit(max: 2, window: "2h", fieldArrayLength: "things")
 }
 ```
 

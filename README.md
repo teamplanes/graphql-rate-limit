@@ -31,7 +31,7 @@ directive @rateLimit(
   window: String,
   message: String, 
   identityArgs: [String], 
-  fieldArrayLength: String
+  arrayLengthField: String
 ) on FIELD_DEFINITION
 
 type Query {
@@ -54,7 +54,7 @@ type Mutation {
   # or
   # createSomethings(things: ["thing 1"])
   # createSomethings(things: ["thing 2"])
-  createSomethings(things: [String]): [Thing] @rateLimit(max: 2, window: "2h", fieldArrayLength: "things")
+  createSomethings(things: [String]): [Thing] @rateLimit(max: 2, window: "2h", arrayLengthField: "things")
 }
 ```
 
@@ -131,7 +131,7 @@ directive @rateLimit(
   window: String,
   message: String, 
   identityArgs: [String], 
-  fieldArrayLength: String
+  arrayLengthField: String
 ) on FIELD_DEFINITION
 
 type Query {
@@ -163,7 +163,7 @@ If you wanted to limit the requests to a field per id, per user, use `identityAr
 
 A custom message per field. Note you can also use `formatError` to customise the default error message if you don't want to define a single message per rate limited field.
 
-#### `fieldArrayLength`
+#### `arrayLengthField`
 
 Limit calls to the field, using the length of the array as the number of calls to the field.
 

@@ -5,7 +5,7 @@ interface StoreData {
   // Object of fields identified by the field name + potentially args.
   readonly [identity: string]: {
     // Array of calls for a given field identity
-    readonly [fieldIdentity: string]: ReadonlyArray<number>;
+    readonly [fieldIdentity: string]: readonly number[];
   };
 }
 
@@ -16,7 +16,7 @@ class InMemoryStore implements Store {
 
   public setForIdentity(
     identity: Identity,
-    timestamps: ReadonlyArray<number>
+    timestamps: readonly number[]
   ): void {
     // tslint:disable-next-line no-object-mutation
     this.state = {
@@ -28,7 +28,7 @@ class InMemoryStore implements Store {
     };
   }
 
-  public getForIdentity(identity: Identity): ReadonlyArray<number> {
+  public getForIdentity(identity: Identity): readonly number[] {
     const ctxState = this.state[identity.contextIdentity];
     return (ctxState && ctxState[identity.fieldIdentity]) || [];
   }

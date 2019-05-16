@@ -1,6 +1,7 @@
 class RateLimitError extends Error {
   public readonly isRateLimitError = true;
-  constructor(message: string) {
+
+  public constructor(message: string) {
     super(message);
     Object.setPrototypeOf(this, RateLimitError.prototype);
   }

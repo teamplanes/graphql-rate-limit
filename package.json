@@ -14,7 +14,7 @@
     "build:module": "tsc --preserveWatchOutput -p tsconfig.module.json",
     "example": "concurrently \"yarn build:main -w\" \"cd example && yarn dev\"",
     "fix": "run-s fix:*",
-    "test": "nyc --silent ava",
+    "test": "yarn build:main && nyc --silent ava",
     "watch": "yarn build:main && concurrently \"yarn build:main -w\" \"yarn test --watch --verbose\""
   },
   "engines": {

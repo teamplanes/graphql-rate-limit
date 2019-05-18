@@ -2,56 +2,61 @@ import { Store } from './store';
 import { Identity } from './types';
 
 class RedisStore implements Store {
-  // tslint:disable-next-line readonly-keyword
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public store: any;
+
   private readonly nameSpacedKeyPrefix: string = 'redis-store-id::';
 
-  constructor(redisStoreInstance: any) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public constructor(redisStoreInstance: any) {
     this.store = redisStoreInstance;
   }
 
   public setForIdentity(
     identity: Identity,
-    timestamps: ReadonlyArray<number>,
+    timestamps: readonly number[],
     windowMs?: number
   ): Promise<void> {
-    return new Promise<void>((res, rej) => {
-      const expiry = windowMs
-        ? [
-            'EX',
-            Math.ceil((Date.now() + windowMs - Math.max(...timestamps)) / 1000)
-          ]
-        : [];
-      this.store.set(
-        [
-          this.generateNamedSpacedKey(identity),
-          JSON.stringify([...timestamps]),
-          ...expiry
-        ],
-        (err: Error | null) => {
-          if (err) {
-            return rej(err);
+    return new Promise<void>(
+      (res, rej): void => {
+        const expiry = windowMs
+          ? [
+              'EX',
+              Math.ceil(
+                (Date.now() + windowMs - Math.max(...timestamps)) / 1000
+              )
+            ]
+          : [];
+        this.store.set(
+          [
+            this.generateNamedSpacedKey(identity),
+            JSON.stringify([...timestamps]),
+            ...expiry
+          ],
+          (err: Error | null): void => {
+            if (err) return rej(err);
+            return res();
           }
-          res();
-        }
-      );
-    });
+        );
+      }
+    );
   }
 
-  public async getForIdentity(
-    identity: Identity
-  ): Promise<ReadonlyArray<number>> {
-    return new Promise<ReadonlyArray<number>>((res, rej) => {
-      this.store.get(
-        this.generateNamedSpacedKey(identity),
-        (err: Error | null, obj: any) => {
-          if (err) {
-            return rej(err);
+  public async getForIdentity(identity: Identity): Promise<readonly number[]> {
+    return new Promise<readonly number[]>(
+      (res, rej): void => {
+        this.store.get(
+          this.generateNamedSpacedKey(identity),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (err: Error | null, obj: any): void => {
+            if (err) {
+              return rej(err);
+            }
+            return res(obj ? JSON.parse(obj) : []);
           }
-          res(obj ? JSON.parse(obj) : []);
-        }
-      );
-    });
+        );
+      }
+    );
   }
 
   private readonly generateNamedSpacedKey = (identity: Identity): string => {

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import test from 'ava';
 import redis from 'redis-mock';
 import { RedisStore } from './redis-store';

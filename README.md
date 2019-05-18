@@ -151,7 +151,7 @@ store: new MyCustomStore()
 
 #### `formatError`
 
-Generate a custom error message. Note that the `message` passed in to the directive will be used if its set.
+Generate a custom error message. Note that the `message` passed in to the field config will be used if its set.
 
 ```js
 formatError: ({ fieldName }) => `Woah there, you are doing way too much ${fieldName}`

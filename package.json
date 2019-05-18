@@ -1,6 +1,6 @@
 {
   "name": "graphql-rate-limit",
-  "version": "1.2.4",
+  "version": "2.0.0",
   "description": "Add Rate Limiting To Your GraphQL Resolvers 💂‍♀",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",

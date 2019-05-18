@@ -14,20 +14,6 @@ const DEFAULT_WINDOW = 60 * 1000;
 const DEFAULT_MAX = 5;
 const DEFAULT_FIELD_IDENTITY_ARGS: readonly string[] = [];
 
-// Default directive config
-const defaultConfig = {
-  formatError: ({ fieldName }: FormatErrorInput) => {
-    return `You are trying to access '${fieldName}' too often`;
-  },
-  // Required
-  identifyContext: () => {
-    throw new Error(
-      'You must implement a createRateLimitDirective.config.identifyContext'
-    );
-  },
-  store: new InMemoryStore()
-};
-
 /**
  * Returns a string key for the given field + args. With no identityArgs are provided, just the fieldName
  * will be used for the key. If an array of resolveArgs are provided, the values of those will be built
@@ -59,6 +45,20 @@ const getGraphQLRateLimiter = (
   // Main config (e.g. the config passed to the createRateLimitDirective func)
   userConfig: GraphQLRateLimitConfig
 ) => {
+  // Default directive config
+  const defaultConfig = {
+    formatError: ({ fieldName }: FormatErrorInput) => {
+      return `You are trying to access '${fieldName}' too often`;
+    },
+    // Required
+    identifyContext: () => {
+      throw new Error(
+        'You must implement a createRateLimitDirective.config.identifyContext'
+      );
+    },
+    store: new InMemoryStore()
+  };
+
   const { identifyContext, formatError, store } = {
     ...defaultConfig,
     ...userConfig

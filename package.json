@@ -24,7 +24,7 @@
   "dependencies": {
     "@types/redis-mock": "^0.17.0",
     "graphql-middleware": "^3.0.2",
-    "graphql-shield": "^5.3.5",
+    "graphql-shield": "^6.0.2",
     "graphql-tools": "^4.0.3",
     "lodash.get": "^4.4.2",
     "ms": "^2.1.1"
@@ -50,6 +50,7 @@
     "nyc": "^13.1.0",
     "prettier": "^1.17.1",
     "redis-mock": "^0.42.0",
+    "standard-version": "^6.0.1",
     "typescript": "^3.4.5"
   },
   "ava": {

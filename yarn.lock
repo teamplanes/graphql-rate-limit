@@ -469,10 +469,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/yup@0.26.20":
-  version "0.26.20"
-  resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.26.20.tgz#3b85a05f5dd76e2e8475abb6a8aeae7777627143"
-  integrity sha512-LpCsA6NG7vIU7Umv1k4w3YGIBH5ZLZRPEKo8vJLHVbBUqRy2WaJ002kbsRqcwODpkICAOMuyGOqLQJa5isZ8+g==
+"@types/yup@0.26.23":
+  version "0.26.23"
+  resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.26.23.tgz#00721a3b675e7609e5bcccb94234e86b754bcd04"
+  integrity sha512-+tipAL6prdInS/avA6QityIFBDvHnqk1Tv9L5JMEws5IZC6agymBGAoDsrPyYp42wGcktyQtYKv9kvGPEKd4Qg==
 
 "@typescript-eslint/eslint-plugin@^1.9.0":
   version "1.11.0"
@@ -2439,11 +2439,11 @@ graphql-middleware@^3.0.2:
     graphql-tools "^4.0.4"
 
 graphql-shield@^6.0.2:
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/graphql-shield/-/graphql-shield-6.0.2.tgz#3ebad8faacbada91b8e576029732e91b5a041c7f"
-  integrity sha512-3qV2qjeNZla1Fyg6Q2NR5J9AsMaNePLbUboOwhRXB7IcMnTnrxSiVn2R//8VnjnmBjF9rcvgAIAvETZ8AKGfsg==
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/graphql-shield/-/graphql-shield-6.1.0.tgz#7298af72167e7c9fd19a36fac9b425b94025a393"
+  integrity sha512-dIZ6ABnUn3XQtIzw9/9f8wFmZoY5XZlsHgkxSKF+N/oXmKvQoi11J5/y/jxJTBmKYi/2JZ12C1JjDn5TOopn+w==
   dependencies:
-    "@types/yup" "0.26.20"
+    "@types/yup" "0.26.23"
     lightercollective "^0.3.0"
     object-hash "^1.3.1"
     yup "^0.27.0"

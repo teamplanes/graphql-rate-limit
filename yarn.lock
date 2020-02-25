@@ -4282,10 +4282,10 @@ redent@^2.0.0:
     indent-string "^3.0.0"
     strip-indent "^2.0.0"
 
-redis-mock@^0.42.0:
-  version "0.42.0"
-  resolved "https://registry.yarnpkg.com/redis-mock/-/redis-mock-0.42.0.tgz#9eefe245b7353671d95374c337060b56e7eb9eab"
-  integrity sha512-hszPgpKwwynzS8uKTGPd4T35jvVy2Yv7uKx1HPjFdt2XHKOuJhmjeWm+VEd7DCMEYBv3g18zBMXjSofKaeYxnw==
+redis-mock@^0.49.0:
+  version "0.49.0"
+  resolved "https://registry.yarnpkg.com/redis-mock/-/redis-mock-0.49.0.tgz#744c38dde3caae4c9ca70e2a674c4bb30eb607ca"
+  integrity sha512-FW/cLZvF1PAVN/PYIwXf1vQRoJCyYCwUMtq8BXRwrvb9LNNAT4RKXM02Qlt6qSkC/98hmHlU2EGoQoxVy3E2lA==
 
 regenerate-unicode-properties@^8.0.2:
   version "8.1.0"

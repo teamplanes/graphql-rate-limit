@@ -75,7 +75,8 @@ test('getGraphQLRateLimiter with an empty store passes, but second time fails', 
 test('getGraphQLRateLimiter should block a batch of rate limited fields in a single query', async t => {
   const rateLimit = getGraphQLRateLimiter({
     store: new InMemoryStore(),
-    identifyContext: context => context.id
+    identifyContext: context => context.id,
+    enableBatchRequestCache: true
   });
   const config = { max: 3, window: '1s' };
   const field = {

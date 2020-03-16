@@ -2,6 +2,7 @@ import { GraphQLResolveInfo } from 'graphql';
 import get from 'lodash.get';
 import ms from 'ms';
 import { InMemoryStore } from './in-memory-store';
+import { getNoOpCache, getWeakMapCache } from './batch-request-cache';
 import {
   FormatErrorInput,
   GraphQLRateLimitConfig,
@@ -47,6 +48,7 @@ const getGraphQLRateLimiter = (
 ) => {
   // Default directive config
   const defaultConfig = {
+    enableBatchRequestCache: false,
     formatError: ({ fieldName }: FormatErrorInput) => {
       return `You are trying to access '${fieldName}' too often`;
     },
@@ -59,10 +61,14 @@ const getGraphQLRateLimiter = (
     store: new InMemoryStore()
   };
 
-  const { identifyContext, formatError, store } = {
+  const { enableBatchRequestCache, identifyContext, formatError, store } = {
     ...defaultConfig,
     ...userConfig
   };
+
+  const batchRequestCache = enableBatchRequestCache
+    ? getWeakMapCache()
+    : getNoOpCache();
 
   /**
    * Field level rate limiter function that returns the error message or undefined
@@ -108,15 +114,20 @@ const getGraphQLRateLimiter = (
       (arrayLengthField && get(args, [arrayLengthField, 'length'])) || 1;
     // Allinclusive 'identity' for this resolver call
     const identity: Identity = { contextIdentity, fieldIdentity };
-    // Retrieve all the timestamps to the field for the context identity
-    const accessTimestamps = await store.getForIdentity(identity);
     // Timestamp of this call to be save for future ref
     const timestamp = Date.now();
     // Create an array of callCount length, filled with the current timestamp
     const newTimestamps = [...new Array(callCount || 1)].map(() => timestamp);
     // Get all the timestamps that havent expired
+    const batchedTimestamps = batchRequestCache.set({
+      context,
+      fieldIdentity,
+      newTimestamps
+    });
+    // Retrieve all the timestamps to the field for the context identity
+    const accessTimestamps = await store.getForIdentity(identity);
     const filteredAccessTimestamps: readonly any[] = [
-      ...newTimestamps,
+      ...batchedTimestamps,
       ...accessTimestamps.filter(t => {
         return t + windowMs > Date.now();
       })

@@ -53,6 +53,58 @@ test('rate limit with schema directive', async t => {
   t.deepEqual(data3, { test: 'Result' });
 });
 
+test('batch query should error when rate limit exceeded', async t => {
+  const rule = createRateLimitRule({
+    identifyContext: ctx => ctx.id,
+    enableBatchRequestCache: true
+  });
+  const schema = applyMiddleware(
+    makeExecutableSchema({
+      resolvers: { Query: { test: () => 'Result' } },
+      typeDefs: 'type Query { test: String! }'
+    }),
+    shield(
+      { Query: { test: rule({ max: 1, window: '1s' }) } },
+      { allowExternalErrors: true }
+    )
+  );
+  const { data } = await graphql(
+    schema,
+    'query { test otherTest: test otherOtherTest: test }',
+    {},
+    { id: '1' }
+  );
+  t.is(data, null);
+});
+
+test('batch query should succeed when within rate limit', async t => {
+  const rule = createRateLimitRule({
+    identifyContext: ctx => ctx.id,
+    enableBatchRequestCache: true
+  });
+  const schema = applyMiddleware(
+    makeExecutableSchema({
+      resolvers: { Query: { test: () => 'Result' } },
+      typeDefs: 'type Query { test: String! }'
+    }),
+    shield(
+      { Query: { test: rule({ max: 5, window: '1s' }) } },
+      { allowExternalErrors: true }
+    )
+  );
+  const { data } = await graphql(
+    schema,
+    'query { test otherTest: test otherOtherTest: test }',
+    {},
+    { id: '1' }
+  );
+  t.deepEqual(data, {
+    test: 'Result',
+    otherTest: 'Result',
+    otherOtherTest: 'Result'
+  });
+});
+
 test('rate limit with graphql shield', async t => {
   const rule = createRateLimitRule({
     identifyContext: ctx => ctx.id

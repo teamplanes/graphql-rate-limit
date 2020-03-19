@@ -118,14 +118,19 @@ const getGraphQLRateLimiter = (
     const timestamp = Date.now();
     // Create an array of callCount length, filled with the current timestamp
     const newTimestamps = [...new Array(callCount || 1)].map(() => timestamp);
-    // Get all the timestamps that havent expired
+
+    // We set these new timestamps in a temporary memory cache so we can enforce
+    // ratelimits across queries batched in a single request.
     const batchedTimestamps = batchRequestCache.set({
       context,
       fieldIdentity,
       newTimestamps
     });
-    // Retrieve all the timestamps to the field for the context identity
+
+    // Fetch timestamps from previous requests out of the store.
     const accessTimestamps = await store.getForIdentity(identity);
+
+    // Get all the timestamps that haven't expired
     const filteredAccessTimestamps: readonly any[] = [
       ...batchedTimestamps,
       ...accessTimestamps.filter(t => {
@@ -133,7 +138,7 @@ const getGraphQLRateLimiter = (
       })
     ];
 
-    // Save these access timestamps
+    // Save these access timestamps for future requests.
     await store.setForIdentity(identity, filteredAccessTimestamps, windowMs);
 
     // Field level custom message or a global formatting function

@@ -157,6 +157,14 @@ Generate a custom error message. Note that the `message` passed in to the field 
 formatError: ({ fieldName }) => `Woah there, you are doing way too much ${fieldName}`
 ```
 
+#### `enableBatchRequestCache`
+
+This enables a per-request synchronous cache to properly rate limit batch queries. Defaults to `false` to preserve backwards compatibility. 
+
+```js
+enableBatchRequestCache: false | true
+```
+
 ### Field Config
 
 #### `window`

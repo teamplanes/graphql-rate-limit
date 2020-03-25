@@ -72,6 +72,29 @@ test('getGraphQLRateLimiter with an empty store passes, but second time fails', 
   );
 });
 
+test('getGraphQLRateLimiter should block a batch of rate limited fields in a single query', async t => {
+  const rateLimit = getGraphQLRateLimiter({
+    store: new InMemoryStore(),
+    identifyContext: context => context.id,
+    enableBatchRequestCache: true
+  });
+  const config = { max: 3, window: '1s' };
+  const field = {
+    parent: {},
+    args: {},
+    context: { id: '1' },
+    info: ({ fieldName: 'myField' } as any) as GraphQLResolveInfo
+  };
+  const requests = Array.from({ length: 5 })
+    .map(() => rateLimit(field, config))
+    .map(p => p.catch(e => e));
+
+  (await Promise.all(requests)).forEach((result, idx) => {
+    if (idx < 3) t.falsy(result);
+    else t.is(result, `You are trying to access 'myField' too often`);
+  });
+});
+
 test('getGraphQLRateLimiter timestamps should expire', async t => {
   const rateLimit = getGraphQLRateLimiter({
     store: new InMemoryStore(),

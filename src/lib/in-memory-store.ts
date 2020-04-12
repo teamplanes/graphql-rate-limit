@@ -14,10 +14,10 @@ class InMemoryStore implements Store {
   // tslint:disable-next-line readonly-keyword
   public state: StoreData = {};
 
-  public setForIdentity(
+  public async setForIdentity(
     identity: Identity,
     timestamps: readonly number[]
-  ): void {
+  ): Promise<void> {
     // tslint:disable-next-line no-object-mutation
     this.state = {
       ...(this.state || {}),
@@ -28,7 +28,7 @@ class InMemoryStore implements Store {
     };
   }
 
-  public getForIdentity(identity: Identity): readonly number[] {
+  public async getForIdentity(identity: Identity): Promise<readonly number[]> {
     const ctxState = this.state[identity.contextIdentity];
     return (ctxState && ctxState[identity.fieldIdentity]) || [];
   }

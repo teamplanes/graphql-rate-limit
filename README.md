@@ -157,6 +157,19 @@ Generate a custom error message. Note that the `message` passed in to the field 
 formatError: ({ fieldName }) => `Woah there, you are doing way too much ${fieldName}`
 ```
 
+#### `onStoreError`
+
+If your backing store (e.g. redis) throws an error, `graphql-rate-limit` will call this hook with the error. By default the error will be thrown, stopping/blocking the request.  If you supply a hook and don't rethrow the error in your handler, `graphql-rate-limit` will allow the request through, effectively disabling rate-limiting while your store is down.
+
+```js
+onStoreError: (exception) => {
+  // Do some logging or trigger an alert maybe?
+  logger.error(exception);
+
+  /* Not rethrowing the exception will allow the request through */
+}
+```
+
 #### `enableBatchRequestCache`
 
 This enables a per-request synchronous cache to properly rate limit batch queries. Defaults to `false` to preserve backwards compatibility. 

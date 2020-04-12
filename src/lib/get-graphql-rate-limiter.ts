@@ -58,10 +58,19 @@ const getGraphQLRateLimiter = (
         'You must implement a createRateLimitDirective.config.identifyContext'
       );
     },
-    store: new InMemoryStore()
+    store: new InMemoryStore(),
+    onStoreError: (e: Error) => {
+      throw e;
+    }
   };
 
-  const { enableBatchRequestCache, identifyContext, formatError, store } = {
+  const {
+    enableBatchRequestCache,
+    identifyContext,
+    formatError,
+    store,
+    onStoreError
+  } = {
     ...defaultConfig,
     ...userConfig
   };
@@ -128,7 +137,10 @@ const getGraphQLRateLimiter = (
     });
 
     // Fetch timestamps from previous requests out of the store.
-    const accessTimestamps = await store.getForIdentity(identity);
+    const accessTimestamps = await store.getForIdentity(identity).catch(e => {
+      onStoreError(e);
+      return [];
+    });
 
     // Get all the timestamps that haven't expired
     const filteredAccessTimestamps: readonly any[] = [
@@ -139,7 +151,9 @@ const getGraphQLRateLimiter = (
     ];
 
     // Save these access timestamps for future requests.
-    await store.setForIdentity(identity, filteredAccessTimestamps, windowMs);
+    await store
+      .setForIdentity(identity, filteredAccessTimestamps, windowMs)
+      .catch(onStoreError);
 
     // Field level custom message or a global formatting function
     const errorMessage =

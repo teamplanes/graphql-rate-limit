@@ -11,7 +11,7 @@ abstract class Store {
     identity: Identity,
     timestamps: readonly number[],
     windowMs?: number
-  ): void | Promise<void>;
+  ): Promise<void>;
 
   /**
    * Gets an array of call timestamps for a given identity.
@@ -20,7 +20,7 @@ abstract class Store {
    */
   public abstract getForIdentity(
     identity: Identity
-  ): readonly number[] | Promise<readonly number[]>;
+  ): Promise<readonly number[]>;
 }
 
 export { Store };

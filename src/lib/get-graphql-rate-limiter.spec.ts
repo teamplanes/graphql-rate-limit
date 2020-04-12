@@ -95,6 +95,50 @@ test('getGraphQLRateLimiter should block a batch of rate limited fields in a sin
   });
 });
 
+const mockErrorStore = {
+  setForIdentity: async () => {
+    throw new Error('Failed to set store.');
+  },
+  getForIdentity: async () => {
+    throw new Error('Failed to get store.');
+  }
+};
+
+test('getGraphQLRateLimiter should throw as normal if store errors', async t => {
+  const rateLimit = getGraphQLRateLimiter({
+    store: mockErrorStore,
+    identifyContext: context => context.id
+  });
+  const config = { max: 1, window: '1s' };
+  const field = {
+    parent: {},
+    args: {},
+    context: { id: '1' },
+    info: ({ fieldName: 'myField' } as any) as GraphQLResolveInfo
+  };
+  await t.throwsAsync(rateLimit(field, config));
+});
+
+test('getGraphQLRateLimiter should call error handler if provided.', async t => {
+  const rateLimit = getGraphQLRateLimiter({
+    store: mockErrorStore,
+    identifyContext: context => context.id,
+    onStoreError: () => t.pass()
+  });
+  const config = { max: 1, window: '1s' };
+  const field = {
+    parent: {},
+    args: {},
+    context: { id: '1' },
+    info: ({ fieldName: 'myField' } as any) as GraphQLResolveInfo
+  };
+  let result;
+  await t.notThrowsAsync(async () => {
+    result = await rateLimit(field, config);
+  });
+  t.falsy(result);
+});
+
 test('getGraphQLRateLimiter timestamps should expire', async t => {
   const rateLimit = getGraphQLRateLimiter({
     store: new InMemoryStore(),

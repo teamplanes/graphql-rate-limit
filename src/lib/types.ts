@@ -86,5 +86,11 @@ export interface GraphQLRateLimitConfig {
    */
   readonly formatError?: (input: FormatErrorInput) => string;
 
+  /**
+   * An optional error handler that will be called if checking a rate limit
+   * fails. (Normally due to failing to read/write from the store).
+   */
+  readonly onStoreError?: (exception: Error) => void;
+
   readonly enableBatchRequestCache?: boolean;
 }

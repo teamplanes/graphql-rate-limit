@@ -10,7 +10,7 @@ A GraphQL Rate Limiter to add basic but granular rate limiting to your Queries o
 ## Features
 
 - 💂‍♀️ Add rate limits to queries or mutations
-- 🤝 Works with any Node.js GraphQL setup (@directive, graphql-sheild rule and a base rate limiter function for every other use case)
+- 🤝 Works with any Node.js GraphQL setup (@directive, graphql-shield rule and a base rate limiter function for every other use case)
 - 🔑 Add filters to rate limits based on the query or mutation args
 - ❌ Custom error messaging
 - ⏰ Configure using a simple `max` per `window` arguments

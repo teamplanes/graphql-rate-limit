@@ -7,7 +7,7 @@
 		"apollo-server": "^2.3.1",
 		"graphql-middleware": "^3.0.2",
 		"graphql-rate-limit": "../",
-		"graphql-shield": "^5.3.5",
+		"graphql-shield": "^6.0.6",
 		"redis": "^2.8.0"
 	},
 	"devDependencies": {

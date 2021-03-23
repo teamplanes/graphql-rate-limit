@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import * as graphql_shield_dist_rules from 'graphql-shield/dist/rules';
+import { Rule } from 'graphql-shield/dist/rules';
 
 declare abstract class Store {
     /**
@@ -115,7 +115,7 @@ declare class InMemoryStore implements Store {
 declare class RedisStore implements Store {
     store: any;
     private readonly nameSpacedKeyPrefix;
-    constructor(redisStoreInstance: any);
+    constructor(redisStoreInstance: unknown);
     setForIdentity(identity: Identity, timestamps: readonly number[], windowMs?: number): Promise<void>;
     getForIdentity(identity: Identity): Promise<readonly number[]>;
     private readonly generateNamedSpacedKey;
@@ -139,18 +139,18 @@ declare class RateLimitError extends Error {
  * @param identityArgs
  * @param resolveArgs
  */
-declare const getFieldIdentity: (fieldName: string, identityArgs: readonly string[], resolveArgs: any) => string;
+declare const getFieldIdentity: (fieldName: string, identityArgs: readonly string[], resolveArgs: unknown) => string;
 /**
  * This is the core rate limiting logic function, APIs (directive, sheild etc.)
  * can wrap this or it can be used directly in resolvers.
  * @param userConfig - global (usually app-wide) rate limiting config
  */
-declare const getGraphQLRateLimiter: (userConfig: GraphQLRateLimitConfig) => ({ args, context, info }: {
+declare const getGraphQLRateLimiter: (userConfig: GraphQLRateLimitConfig) => ({ args, context, info, }: {
     parent: any;
     args: Record<string, any>;
     context: any;
     info: GraphQLResolveInfo;
-}, { arrayLengthField, identityArgs, max, window, message }: GraphQLRateLimitDirectiveArgs) => Promise<string | undefined>;
+}, { arrayLengthField, identityArgs, max, window, message, }: GraphQLRateLimitDirectiveArgs) => Promise<string | undefined>;
 
 /**
  * Creates a graphql-shield rate limit rule. e.g.
@@ -160,7 +160,7 @@ declare const getGraphQLRateLimiter: (userConfig: GraphQLRateLimitConfig) => ({ 
  * const permissions = shield({ Mutation: { signup: rateLimit({ window: '10s', max: 1 }) } })
  * ```
  */
-declare const createRateLimitRule: (config: GraphQLRateLimitConfig) => (fieldConfig: GraphQLRateLimitDirectiveArgs) => graphql_shield_dist_rules.Rule;
+declare const createRateLimitRule: (config: GraphQLRateLimitConfig) => (fieldConfig: GraphQLRateLimitDirectiveArgs) => Rule;
 
 export default createRateLimitDirective;
 export { InMemoryStore, RateLimitError, RedisStore, Store, createRateLimitDirective, createRateLimitRule, getFieldIdentity, getGraphQLRateLimiter };

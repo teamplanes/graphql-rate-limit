@@ -23,8 +23,8 @@ class InMemoryStore implements Store {
       ...(this.state || {}),
       [identity.contextIdentity]: {
         ...(this.state[identity.contextIdentity] || {}),
-        [identity.fieldIdentity]: [...timestamps]
-      }
+        [identity.fieldIdentity]: [...timestamps],
+      },
     };
   }
 

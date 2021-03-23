@@ -8,21 +8,37 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [10.x, 12.x, 14.x, 15.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm i -g pnpm
-    - run: pnpm i
-    - run: pnpm run lint
-    - run: pnpm run build
-    - run: pnpm test
+      - uses: actions/checkout@v2
+      - name: Install node v${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Restore pnpm's global store
+        uses: actions/cache@v2
+        with:
+          path: ~/runner/.pnpm-store/v3
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install pnpm
+        run: npm i -g pnpm
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Build dist
+        run: pnpm run build
+
+      - name: Run tests
+        run: pnpm test

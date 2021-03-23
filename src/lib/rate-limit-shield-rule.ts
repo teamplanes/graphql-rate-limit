@@ -1,5 +1,6 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { rule } from 'graphql-shield';
+import { Rule } from 'graphql-shield/dist/rules';
 import { GraphQLRateLimitConfig, GraphQLRateLimitDirectiveArgs } from './types';
 import { getGraphQLRateLimiter } from './get-graphql-rate-limiter';
 import { RateLimitError } from './rate-limit-error';
@@ -12,7 +13,9 @@ import { RateLimitError } from './rate-limit-error';
  * const permissions = shield({ Mutation: { signup: rateLimit({ window: '10s', max: 1 }) } })
  * ```
  */
-const createRateLimitRule = (config: GraphQLRateLimitConfig) => {
+const createRateLimitRule = (
+  config: GraphQLRateLimitConfig
+): ((fieldConfig: GraphQLRateLimitDirectiveArgs) => Rule) => {
   const noCacheRule = rule({ cache: 'no_cache' });
   const rateLimiter = getGraphQLRateLimiter(config);
 
@@ -23,7 +26,7 @@ const createRateLimitRule = (config: GraphQLRateLimitConfig) => {
           parent,
           args,
           context,
-          info: info as GraphQLResolveInfo // I hope this is so.
+          info: info as GraphQLResolveInfo, // I hope this is so.
         },
         fieldConfig
       );

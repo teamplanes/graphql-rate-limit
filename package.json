@@ -13,7 +13,7 @@
     "build": "tsup ./src/index.ts --format esm,cjs --legacy-output --dts",
     "example": "concurrently \"npm run build -w\" \"cd example && npm run dev\"",
     "fix": "eslint ./src/**/*.ts --fix",
-    "test": "npm run build && nyc --silent ava",
+    "test": "tsup ./src/index.ts && nyc --silent ava",
     "lint": "eslint ./src/**/*.ts"
   },
   "files": [

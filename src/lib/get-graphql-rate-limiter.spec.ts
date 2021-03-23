@@ -3,17 +3,17 @@ import test from 'ava';
 import { GraphQLResolveInfo } from 'graphql';
 import {
   getFieldIdentity,
-  getGraphQLRateLimiter
+  getGraphQLRateLimiter,
 } from './get-graphql-rate-limiter';
 import { InMemoryStore } from './in-memory-store';
 import { GraphQLRateLimitDirectiveArgs } from './types';
 
-test('getFieldIdentity with no identity args', t => {
+test('getFieldIdentity with no identity args', (t) => {
   t.is(getFieldIdentity('myField', [], {}), 'myField');
   t.is(getFieldIdentity('random', [], {}), 'random');
 });
 
-test('getFieldIdentity with identity args', t => {
+test('getFieldIdentity with identity args', (t) => {
   t.is(
     getFieldIdentity('myField', ['id'], { id: 2, name: 'Foo' }),
     'myField:2'
@@ -33,7 +33,7 @@ test('getFieldIdentity with identity args', t => {
   );
 });
 
-test('getFieldIdentity with nested identity args', t => {
+test('getFieldIdentity with nested identity args', (t) => {
   t.is(
     getFieldIdentity('myField', ['item.id'], { item: { id: 2 }, name: 'Foo' }),
     'myField:2'
@@ -53,17 +53,17 @@ test('getFieldIdentity with nested identity args', t => {
   );
 });
 
-test('getGraphQLRateLimiter with an empty store passes, but second time fails', async t => {
+test('getGraphQLRateLimiter with an empty store passes, but second time fails', async (t) => {
   const rateLimit = getGraphQLRateLimiter({
     store: new InMemoryStore(),
-    identifyContext: context => context.id
+    identifyContext: (context) => context.id,
   });
   const config = { max: 1, window: '1s' };
   const field = {
     parent: {},
     args: {},
     context: { id: '1' },
-    info: ({ fieldName: 'myField' } as any) as GraphQLResolveInfo
+    info: ({ fieldName: 'myField' } as any) as GraphQLResolveInfo,
   };
   t.falsy(await rateLimit(field, config));
   t.is(
@@ -72,22 +72,22 @@ test('getGraphQLRateLimiter with an empty store passes, but second time fails', 
   );
 });
 
-test('getGraphQLRateLimiter should block a batch of rate limited fields in a single query', async t => {
+test('getGraphQLRateLimiter should block a batch of rate limited fields in a single query', async (t) => {
   const rateLimit = getGraphQLRateLimiter({
     store: new InMemoryStore(),
-    identifyContext: context => context.id,
-    enableBatchRequestCache: true
+    identifyContext: (context) => context.id,
+    enableBatchRequestCache: true,
   });
   const config = { max: 3, window: '1s' };
   const field = {
     parent: {},
     args: {},
     context: { id: '1' },
-    info: ({ fieldName: 'myField' } as any) as GraphQLResolveInfo
+    info: ({ fieldName: 'myField' } as any) as GraphQLResolveInfo,
   };
   const requests = Array.from({ length: 5 })
     .map(() => rateLimit(field, config))
-    .map(p => p.catch(e => e));
+    .map((p) => p.catch((e) => e));
 
   (await Promise.all(requests)).forEach((result, idx) => {
     if (idx < 3) t.falsy(result);
@@ -95,17 +95,17 @@ test('getGraphQLRateLimiter should block a batch of rate limited fields in a sin
   });
 });
 
-test('getGraphQLRateLimiter timestamps should expire', async t => {
+test('getGraphQLRateLimiter timestamps should expire', async (t) => {
   const rateLimit = getGraphQLRateLimiter({
     store: new InMemoryStore(),
-    identifyContext: context => context.id
+    identifyContext: (context) => context.id,
   });
   const config = { max: 1, window: '0.5s' };
   const field = {
     parent: {},
     args: {},
     context: { id: '1' },
-    info: ({ fieldName: 'myField' } as any) as GraphQLResolveInfo
+    info: ({ fieldName: 'myField' } as any) as GraphQLResolveInfo,
   };
   t.falsy(await rateLimit(field, config));
   t.is(
@@ -117,23 +117,23 @@ test('getGraphQLRateLimiter timestamps should expire', async t => {
   }, 500);
 });
 
-test('getGraphQLRateLimiter should limit by callCount if arrayLengthField is passed', async t => {
+test('getGraphQLRateLimiter should limit by callCount if arrayLengthField is passed', async (t) => {
   const rateLimit = getGraphQLRateLimiter({
     store: new InMemoryStore(),
-    identifyContext: context => context.id
+    identifyContext: (context) => context.id,
   });
   const config: GraphQLRateLimitDirectiveArgs = {
     max: 4,
     window: '1s',
-    arrayLengthField: 'items'
+    arrayLengthField: 'items',
   };
   const field = {
     parent: {},
     args: {
-      items: [1, 2, 3, 4, 5]
+      items: [1, 2, 3, 4, 5],
     },
     context: { id: '1' },
-    info: ({ fieldName: 'listOfItems' } as any) as GraphQLResolveInfo
+    info: ({ fieldName: 'listOfItems' } as any) as GraphQLResolveInfo,
   };
   t.is(
     await rateLimit(field, config),
@@ -141,23 +141,23 @@ test('getGraphQLRateLimiter should limit by callCount if arrayLengthField is pas
   );
 });
 
-test('getGraphQLRateLimiter should allow multiple calls to a field if the identityArgs change', async t => {
+test('getGraphQLRateLimiter should allow multiple calls to a field if the identityArgs change', async (t) => {
   const rateLimit = getGraphQLRateLimiter({
     store: new InMemoryStore(),
-    identifyContext: context => context.id
+    identifyContext: (context) => context.id,
   });
   const config: GraphQLRateLimitDirectiveArgs = {
     max: 1,
     window: '1s',
-    identityArgs: ['id']
+    identityArgs: ['id'],
   };
   const field = {
     parent: {},
     args: {
-      id: '1'
+      id: '1',
     },
     context: { id: '1' },
-    info: ({ fieldName: 'listOfItems' } as any) as GraphQLResolveInfo
+    info: ({ fieldName: 'listOfItems' } as any) as GraphQLResolveInfo,
   };
   t.falsy(await rateLimit(field, config));
   t.is(

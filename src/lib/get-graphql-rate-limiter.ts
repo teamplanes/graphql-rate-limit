@@ -7,7 +7,7 @@ import {
   FormatErrorInput,
   GraphQLRateLimitConfig,
   GraphQLRateLimitDirectiveArgs,
-  Identity
+  Identity,
 } from './types';
 
 // Default field options
@@ -31,9 +31,9 @@ const DEFAULT_FIELD_IDENTITY_ARGS: readonly string[] = [];
 const getFieldIdentity = (
   fieldName: string,
   identityArgs: readonly string[],
-  resolveArgs: any
-) => {
-  const argsKey = identityArgs.map(arg => get(resolveArgs, arg));
+  resolveArgs: unknown
+): string => {
+  const argsKey = identityArgs.map((arg) => get(resolveArgs, arg));
   return [fieldName, ...argsKey].join(':');
 };
 
@@ -45,7 +45,25 @@ const getFieldIdentity = (
 const getGraphQLRateLimiter = (
   // Main config (e.g. the config passed to the createRateLimitDirective func)
   userConfig: GraphQLRateLimitConfig
-) => {
+): ((
+  {
+    args,
+    context,
+    info,
+  }: {
+    parent: any;
+    args: Record<string, any>;
+    context: any;
+    info: GraphQLResolveInfo;
+  },
+  {
+    arrayLengthField,
+    identityArgs,
+    max,
+    window,
+    message,
+  }: GraphQLRateLimitDirectiveArgs
+) => Promise<string | undefined>) => {
   // Default directive config
   const defaultConfig = {
     enableBatchRequestCache: false,
@@ -58,12 +76,12 @@ const getGraphQLRateLimiter = (
         'You must implement a createRateLimitDirective.config.identifyContext'
       );
     },
-    store: new InMemoryStore()
+    store: new InMemoryStore(),
   };
 
   const { enableBatchRequestCache, identifyContext, formatError, store } = {
     ...defaultConfig,
-    ...userConfig
+    ...userConfig,
   };
 
   const batchRequestCache = enableBatchRequestCache
@@ -80,7 +98,7 @@ const getGraphQLRateLimiter = (
     {
       args,
       context,
-      info
+      info,
     }: {
       parent: any;
       args: Record<string, any>;
@@ -93,7 +111,7 @@ const getGraphQLRateLimiter = (
       identityArgs,
       max,
       window,
-      message
+      message,
     }: GraphQLRateLimitDirectiveArgs
   ): Promise<string | undefined> => {
     // Identify the user or client on the context
@@ -124,7 +142,7 @@ const getGraphQLRateLimiter = (
     const batchedTimestamps = batchRequestCache.set({
       context,
       fieldIdentity,
-      newTimestamps
+      newTimestamps,
     });
 
     // Fetch timestamps from previous requests out of the store.
@@ -133,9 +151,9 @@ const getGraphQLRateLimiter = (
     // Get all the timestamps that haven't expired
     const filteredAccessTimestamps: readonly any[] = [
       ...batchedTimestamps,
-      ...accessTimestamps.filter(t => {
+      ...accessTimestamps.filter((t) => {
         return t + windowMs > Date.now();
-      })
+      }),
     ];
 
     // Save these access timestamps for future requests.
@@ -149,7 +167,7 @@ const getGraphQLRateLimiter = (
         fieldIdentity,
         fieldName: info.fieldName,
         max: maxCalls,
-        window: windowMs
+        window: windowMs,
       });
 
     // Returns an error message or undefined if no error

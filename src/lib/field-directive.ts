@@ -7,7 +7,7 @@ import {
   GraphQLList,
   GraphQLString
 } from 'graphql';
-import { SchemaDirectiveVisitor } from 'graphql-tools';
+import { SchemaDirectiveVisitor } from '@graphql-tools/utils';
 import { RateLimitError } from './rate-limit-error';
 import { GraphQLRateLimitDirectiveArgs, GraphQLRateLimitConfig } from './types';
 import { getGraphQLRateLimiter } from './get-graphql-rate-limiter';

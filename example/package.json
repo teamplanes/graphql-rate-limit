@@ -4,14 +4,14 @@
 	"main": "index.js",
 	"license": "MIT",
 	"dependencies": {
-		"apollo-server": "^2.3.1",
-		"graphql-middleware": "^3.0.2",
+		"apollo-server": "^2.21.2",
+		"graphql-middleware": "^6.0.4",
 		"graphql-rate-limit": "../",
-		"graphql-shield": "^5.3.5",
-		"redis": "^2.8.0"
+		"graphql-shield": "^7.5.0",
+		"redis": "^3.0.2"
 	},
 	"devDependencies": {
-		"nodemon": "^1.18.9"
+		"nodemon": "^2.0.7"
 	},
 	"scripts": {
 		"start": "node index.js",

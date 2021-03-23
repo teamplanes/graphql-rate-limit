@@ -21,6 +21,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - run: npm i -g pnpm
     - run: pnpm i
     - run: pnpm run lint
     - run: pnpm run build

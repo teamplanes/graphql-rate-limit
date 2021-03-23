@@ -9,7 +9,7 @@
   "license": "MIT",
   "keywords": [],
   "scripts": {
-    "prepare": "npm i && npm run build",
+    "prepare": "npm run build",
     "build": "tsup ./src/index.ts --format esm,cjs --legacy-output --dts",
     "example": "concurrently \"npm run build -w\" \"cd example && npm run dev\"",
     "fix": "eslint ./src/**/*.ts --fix",

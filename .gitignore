@@ -3,6 +3,7 @@ build
 test
 src/**.js
 .idea/*
+*.tgz
 
 coverage
 .nyc_output

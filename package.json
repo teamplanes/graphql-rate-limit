@@ -52,17 +52,20 @@
     "prettier": "^2.2.1",
     "redis-mock": "^0.56.3",
     "standard-version": "^9.1.1",
+    "ts-node": "^9.1.1",
     "tsup": "^4.8.19",
     "typescript": "^4.2.3"
   },
   "ava": {
     "failFast": true,
+    "extensions": [
+      "ts"
+    ],
     "files": [
-      "build/main/**/*.spec.js",
       "src/lib/**/*.spec.ts"
     ],
-    "sources": [
-      "build/main/**/*.js"
+    "require": [
+      "ts-node/register"
     ]
   },
   "prettier": {

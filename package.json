@@ -9,10 +9,11 @@
   "license": "MIT",
   "keywords": [],
   "scripts": {
+    "prepare": "npm run build",
     "build": "tsup ./src/index.ts --format esm,cjs --legacy-output --dts",
-    "example": "concurrently \"pnpm run build -w\" \"cd example && pnpm run dev\"",
+    "example": "concurrently \"npm run build -w\" \"cd example && npm run dev\"",
     "fix": "eslint ./src/**/*.ts --fix",
-    "test": "pnpm run build && nyc --silent ava",
+    "test": "npm run build && nyc --silent ava",
     "lint": "eslint ./src/**/*.ts"
   },
   "files": [

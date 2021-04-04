@@ -3,7 +3,7 @@ import test from 'ava';
 import redis from 'redis-mock';
 import { RedisStore } from './redis-store';
 
-test('RedisStore sets and gets correct timestamps', async t => {
+test('RedisStore sets and gets correct timestamps', async (t) => {
   const storeInstance = new RedisStore(redis.createClient());
 
   await storeInstance.setForIdentity(
@@ -13,7 +13,7 @@ test('RedisStore sets and gets correct timestamps', async t => {
   t.deepEqual(
     await storeInstance.getForIdentity({
       contextIdentity: 'foo',
-      fieldIdentity: 'bar'
+      fieldIdentity: 'bar',
     }),
     [1, 2, 3]
   );
@@ -25,7 +25,7 @@ test('RedisStore sets and gets correct timestamps', async t => {
   t.deepEqual(
     await storeInstance.getForIdentity({
       contextIdentity: 'foo',
-      fieldIdentity: 'bar2'
+      fieldIdentity: 'bar2',
     }),
     [4, 5]
   );
@@ -37,7 +37,7 @@ test('RedisStore sets and gets correct timestamps', async t => {
   t.deepEqual(
     await storeInstance.getForIdentity({
       contextIdentity: 'foo',
-      fieldIdentity: 'bar'
+      fieldIdentity: 'bar',
     }),
     [10, 20]
   );

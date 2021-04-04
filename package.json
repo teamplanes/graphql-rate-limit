@@ -1,66 +1,71 @@
 {
   "name": "graphql-rate-limit",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Add Rate Limiting To Your GraphQL Resolvers 💂‍♀",
-  "main": "build/main/index.js",
-  "typings": "build/main/index.d.ts",
-  "module": "build/module/index.js",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "module": "build/esm/index.js",
   "repository": "https://github.com/teamplanes/graphql-rate-limit",
   "license": "MIT",
   "keywords": [],
   "scripts": {
-    "build": "concurrently build:*",
-    "build:main": "tsc --preserveWatchOutput -p tsconfig.json",
-    "build:module": "tsc --preserveWatchOutput -p tsconfig.module.json",
-    "example": "concurrently \"yarn build:main -w\" \"cd example && yarn dev\"",
-    "fix": "run-s fix:*",
-    "test": "yarn build:main && nyc --silent ava",
-    "lint": "yarn eslint ./src/**/*.ts",
-    "watch": "yarn build:main && concurrently \"yarn build:main -w\" \"yarn test --watch --verbose\""
+    "prepare": "npm run build",
+    "build": "tsup ./src/index.ts --format esm,cjs --legacy-output --dts",
+    "example": "concurrently \"npm run build -w\" \"cd example && npm run dev\"",
+    "fix": "eslint ./src/**/*.ts --fix",
+    "test": "tsup ./src/index.ts && nyc --silent ava",
+    "lint": "eslint ./src/**/*.ts"
   },
+  "files": [
+    "dist"
+  ],
   "engines": {
-    "node": ">=8.9"
+    "node": ">=12.0"
   },
   "dependencies": {
+    "@graphql-tools/schema": "^7.1.3",
+    "@graphql-tools/utils": "^7.6.0",
     "@types/redis-mock": "^0.17.0",
-    "graphql-middleware": "^3.0.2",
-    "graphql-shield": "^6.0.2",
-    "graphql-tools": "^4.0.3",
+    "graphql-middleware": "^6.0.4",
+    "graphql-shield": "^7.5.0",
     "lodash.get": "^4.4.2",
-    "ms": "^2.1.1"
+    "ms": "^2.1.3"
   },
   "peerDependencies": {
     "graphql": "*"
   },
   "devDependencies": {
-    "@types/graphql": "^14.0.4",
-    "@types/lodash.get": "^4.4.4",
-    "@types/ms": "^0.7.30",
-    "@typescript-eslint/eslint-plugin": "^1.9.0",
-    "@typescript-eslint/parser": "^1.9.0",
-    "ava": "1.0.0-beta.7",
-    "concurrently": "^4.1.0",
-    "eslint": "5.3.0",
-    "eslint-config-airbnb-base": "13.1.0",
-    "eslint-config-prettier": "^4.2.0",
-    "eslint-plugin-ava": "^6.0.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-prettier": "^3.1.0",
-    "graphql": "^14.0.2",
-    "nyc": "^13.1.0",
-    "prettier": "^1.17.1",
-    "redis-mock": "^0.42.0",
-    "standard-version": "^6.0.1",
-    "typescript": "^3.4.5"
+    "@types/lodash.get": "^4.4.6",
+    "@types/ms": "^0.7.31",
+    "@typescript-eslint/eslint-plugin": "^4.19.0",
+    "@typescript-eslint/parser": "^4.19.0",
+    "ava": "3.15.0",
+    "concurrently": "^6.0.0",
+    "eslint": "7.22.0",
+    "eslint-config-airbnb-base": "14.2.1",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-ava": "^11.0.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.3.1",
+    "graphql": "^15.5.0",
+    "nyc": "^15.1.0",
+    "prettier": "^2.2.1",
+    "redis-mock": "^0.56.3",
+    "standard-version": "^9.1.1",
+    "ts-node": "^9.1.1",
+    "tsup": "^4.8.19",
+    "typescript": "^4.2.3"
   },
   "ava": {
     "failFast": true,
+    "extensions": [
+      "ts"
+    ],
     "files": [
-      "build/main/**/*.spec.js",
       "src/lib/**/*.spec.ts"
     ],
-    "sources": [
-      "build/main/**/*.js"
+    "require": [
+      "ts-node/register"
     ]
   },
   "prettier": {

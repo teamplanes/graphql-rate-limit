@@ -1,17 +1,29 @@
-export const getNoOpCache = () => ({
-  set: ({ newTimestamps }: { newTimestamps: number[] }) => newTimestamps
+export const getNoOpCache = (): {
+  set: ({ newTimestamps }: { newTimestamps: number[] }) => number[];
+} => ({
+  set: ({ newTimestamps }: { newTimestamps: number[] }) => newTimestamps,
 });
 
-export const getWeakMapCache = () => {
+export const getWeakMapCache = (): {
+  set: ({
+    context,
+    fieldIdentity,
+    newTimestamps,
+  }: {
+    context: Record<any, any>;
+    fieldIdentity: string;
+    newTimestamps: number[];
+  }) => any;
+} => {
   const cache = new WeakMap();
 
   return {
     set: ({
       context,
       fieldIdentity,
-      newTimestamps
+      newTimestamps,
     }: {
-      context: object;
+      context: Record<any, any>;
       fieldIdentity: string;
       newTimestamps: number[];
     }) => {
@@ -19,10 +31,10 @@ export const getWeakMapCache = () => {
 
       currentCalls[fieldIdentity] = [
         ...(currentCalls[fieldIdentity] || []),
-        ...newTimestamps
+        ...newTimestamps,
       ];
       cache.set(context, currentCalls);
       return currentCalls[fieldIdentity];
-    }
+    },
   };
 };

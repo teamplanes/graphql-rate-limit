@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import test from 'ava';
-import { makeExecutableSchema } from 'graphql-tools';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 import { graphql } from 'graphql';
 import { applyMiddleware } from 'graphql-middleware';
 import { shield } from 'graphql-shield';
@@ -8,18 +8,18 @@ import { createRateLimitDirective } from './field-directive';
 import { createRateLimitRule } from './rate-limit-shield-rule';
 import { getGraphQLRateLimiter } from './get-graphql-rate-limiter';
 
-test('rate limit with schema directive', async t => {
+test('rate limit with schema directive', async (t) => {
   const directive = createRateLimitDirective({
-    identifyContext: ctx => ctx.id
+    identifyContext: (ctx) => ctx.id,
   });
   const schema = makeExecutableSchema({
     schemaDirectives: {
-      rateLimit: directive
+      rateLimit: directive,
     },
     resolvers: {
       Query: {
-        test: () => 'Result'
-      }
+        test: () => 'Result',
+      },
     },
     typeDefs: `
       directive @rateLimit(
@@ -31,7 +31,7 @@ test('rate limit with schema directive', async t => {
       ) on FIELD_DEFINITION
 
       type Query { test: String! @rateLimit(max: 1, window: "1s") }
-    `
+    `,
   });
   const { data } = await graphql(schema, 'query { test }', {}, { id: '1' });
   t.deepEqual(data, { test: 'Result' });
@@ -53,15 +53,15 @@ test('rate limit with schema directive', async t => {
   t.deepEqual(data3, { test: 'Result' });
 });
 
-test('batch query should error when rate limit exceeded', async t => {
+test('batch query should error when rate limit exceeded', async (t) => {
   const rule = createRateLimitRule({
-    identifyContext: ctx => ctx.id,
-    enableBatchRequestCache: true
+    identifyContext: (ctx) => ctx.id,
+    enableBatchRequestCache: true,
   });
   const schema = applyMiddleware(
     makeExecutableSchema({
       resolvers: { Query: { test: () => 'Result' } },
-      typeDefs: 'type Query { test: String! }'
+      typeDefs: 'type Query { test: String! }',
     }),
     shield(
       { Query: { test: rule({ max: 1, window: '1s' }) } },
@@ -77,15 +77,15 @@ test('batch query should error when rate limit exceeded', async t => {
   t.is(data, null);
 });
 
-test('batch query should succeed when within rate limit', async t => {
+test('batch query should succeed when within rate limit', async (t) => {
   const rule = createRateLimitRule({
-    identifyContext: ctx => ctx.id,
-    enableBatchRequestCache: true
+    identifyContext: (ctx) => ctx.id,
+    enableBatchRequestCache: true,
   });
   const schema = applyMiddleware(
     makeExecutableSchema({
       resolvers: { Query: { test: () => 'Result' } },
-      typeDefs: 'type Query { test: String! }'
+      typeDefs: 'type Query { test: String! }',
     }),
     shield(
       { Query: { test: rule({ max: 5, window: '1s' }) } },
@@ -101,18 +101,18 @@ test('batch query should succeed when within rate limit', async t => {
   t.deepEqual(data, {
     test: 'Result',
     otherTest: 'Result',
-    otherOtherTest: 'Result'
+    otherOtherTest: 'Result',
   });
 });
 
-test('rate limit with graphql shield', async t => {
+test('rate limit with graphql shield', async (t) => {
   const rule = createRateLimitRule({
-    identifyContext: ctx => ctx.id
+    identifyContext: (ctx) => ctx.id,
   });
   const schema = applyMiddleware(
     makeExecutableSchema({
       resolvers: { Query: { test: () => 'Result' } },
-      typeDefs: 'type Query { test: String! }'
+      typeDefs: 'type Query { test: String! }',
     }),
     shield({ Query: { test: rule({ max: 1, window: '1s' }) } })
   );
@@ -133,9 +133,9 @@ test('rate limit with graphql shield', async t => {
   t.deepEqual(res3.data, { test: 'Result' });
 });
 
-test('rate limit with base rate limiter', async t => {
+test('rate limit with base rate limiter', async (t) => {
   const rateLimiter = getGraphQLRateLimiter({
-    identifyContext: ctx => ctx.id
+    identifyContext: (ctx) => ctx.id,
   });
   const schema = makeExecutableSchema({
     resolvers: {
@@ -147,10 +147,10 @@ test('rate limit with base rate limiter', async t => {
           );
           if (errorMessage) throw new Error(errorMessage);
           return 'Result';
-        }
-      }
+        },
+      },
     },
-    typeDefs: 'type Query { test: String! }'
+    typeDefs: 'type Query { test: String! }',
   });
 
   const res = await graphql(schema, 'query { test }', {}, { id: '1' });

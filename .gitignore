@@ -1,8 +1,10 @@
 node_modules
 build
+dist
 test
 src/**.js
 .idea/*
+*.tgz
 
 coverage
 .nyc_output

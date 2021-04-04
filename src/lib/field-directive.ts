@@ -5,9 +5,9 @@ import {
   GraphQLField,
   GraphQLInt,
   GraphQLList,
-  GraphQLString
+  GraphQLString,
 } from 'graphql';
-import { SchemaDirectiveVisitor } from 'graphql-tools';
+import { SchemaDirectiveVisitor } from '@graphql-tools/utils';
 import { RateLimitError } from './rate-limit-error';
 import { GraphQLRateLimitDirectiveArgs, GraphQLRateLimitConfig } from './types';
 import { getGraphQLRateLimiter } from './get-graphql-rate-limiter';
@@ -29,23 +29,23 @@ const createRateLimitDirective = (
       return new GraphQLDirective({
         args: {
           arrayLengthField: {
-            type: GraphQLString
+            type: GraphQLString,
           },
           identityArgs: {
-            type: new GraphQLList(GraphQLString)
+            type: new GraphQLList(GraphQLString),
           },
           max: {
-            type: GraphQLInt
+            type: GraphQLInt,
           },
           message: {
-            type: GraphQLString
+            type: GraphQLString,
           },
           window: {
-            type: GraphQLString
-          }
+            type: GraphQLString,
+          },
         },
         locations: [DirectiveLocation.FIELD_DEFINITION],
-        name: directiveName
+        name: directiveName,
       });
     }
 
@@ -60,7 +60,7 @@ const createRateLimitDirective = (
             parent,
             args,
             context,
-            info
+            info,
           },
           this.args
         );

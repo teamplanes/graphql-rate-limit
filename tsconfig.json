@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "outDir": "build/main",
+    "target": "es6",
+    "outDir": "dist",
     "rootDir": "src",
     "moduleResolution": "node",
     "module": "commonjs",
@@ -20,7 +20,7 @@
     "listFiles": false,
     "pretty": true,
 
-    "lib": [ "esnext.asynciterable", "es2017"],
+    "lib": [],
     "types": ["node"],
     "typeRoots": ["node_modules/@types", "src/types"],
   },

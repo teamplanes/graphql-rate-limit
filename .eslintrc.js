@@ -7,8 +7,8 @@ module.exports = {
     'airbnb-base',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
-    'prettier/@typescript-eslint',
-    'plugin:ava/recommended'
+    'prettier',
+    'plugin:ava/recommended',
   ],
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint/eslint-plugin', 'prettier'],
@@ -21,16 +21,17 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'import/extensions': 'off',
     'import/prefer-default-export': 'off',
     '@typescript-eslint/no-explicit-any': 0,
-    '@typescript-eslint/explicit-function-return-type': 0
+    '@typescript-eslint/explicit-function-return-type': 0,
   },
   settings: {
-    "import/resolver": {
-      "node": {
-        "paths": ["src"],
-        "extensions": [".js", ".jsx", ".ts", ".tsx"]
-      }
+    'import/resolver': {
+      node: {
+        paths: ['src'],
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      },
     }
-  }
+  },
 };

@@ -112,6 +112,7 @@ const getGraphQLRateLimiter = (
       max,
       window,
       message,
+      readOnly,
     }: GraphQLRateLimitDirectiveArgs
   ): Promise<string | undefined> => {
     // Identify the user or client on the context
@@ -157,7 +158,9 @@ const getGraphQLRateLimiter = (
     ];
 
     // Save these access timestamps for future requests.
-    await store.setForIdentity(identity, filteredAccessTimestamps, windowMs);
+    if (!readOnly) {
+      await store.setForIdentity(identity, filteredAccessTimestamps, windowMs);
+    }
 
     // Field level custom message or a global formatting function
     const errorMessage =

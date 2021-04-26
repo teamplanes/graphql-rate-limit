@@ -50,6 +50,11 @@ export interface GraphQLRateLimitDirectiveArgs {
    * Limit by the length of an input array
    */
   readonly arrayLengthField?: string;
+  /**
+   * Prevents registering the current request to the store.
+   * This can be useful for example when you only wanna rate limit on failed attempts.
+   */
+  readonly readOnly?: boolean;
 }
 
 /**

@@ -1,26 +1,16 @@
+### Install
+```sh
+pnpm i
+```
+
 ### Run
 
 ```sh
-yarn start
+pnpm start
 ```
-
 
 ### Develop
 
-Ensure you have `yalc` installed:
-
 ```sh
-yarn global add yalc
-```
-
-Link `graphql-rate-limit` to this project:
-
-```sh
-cd .. && yalc publish && cd ./example && yalc link "graphql-rate-limit"
-```
-
-Run in `example` from the root of the project:
-
-```sh
-cd .. && yarn example
+pnpm dev
 ```

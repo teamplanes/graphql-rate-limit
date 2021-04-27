@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 15.x]
+        node-version: [12.x, 14.x, 16.x]
 
     steps:
       - uses: actions/checkout@v2
@@ -28,11 +28,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install pnpm
-        run: npm i -g pnpm
-
-      - name: Install dependencies
-        run: pnpm i
+      - uses: pnpm/action-setup@v2.0.0
+        with:
+          version: 6.0.2
+          run_install: |
+            - args: [--frozen-lockfile, --reporter=silent]
 
       - name: Lint
         run: pnpm run lint

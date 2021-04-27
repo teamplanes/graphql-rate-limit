@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es2019",
     "outDir": "dist",
     "rootDir": "src",
     "moduleResolution": "node",
@@ -22,7 +22,7 @@
 
     "lib": [],
     "types": ["node"],
-    "typeRoots": ["node_modules/@types", "src/types"],
+    "typeRoots": ["node_modules/@types", "src/types"]
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules/**"],

@@ -1,6 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { rule } from 'graphql-shield';
-import { Rule } from 'graphql-shield/dist/rules';
+import { rule, IRule } from 'graphql-shield';
 import { GraphQLRateLimitConfig, GraphQLRateLimitDirectiveArgs } from './types';
 import { getGraphQLRateLimiter } from './get-graphql-rate-limiter';
 import { RateLimitError } from './rate-limit-error';
@@ -15,7 +14,7 @@ import { RateLimitError } from './rate-limit-error';
  */
 const createRateLimitRule = (
   config: GraphQLRateLimitConfig
-): ((fieldConfig: GraphQLRateLimitDirectiveArgs) => Rule) => {
+): ((fieldConfig: GraphQLRateLimitDirectiveArgs) => IRule) => {
   const noCacheRule = rule({ cache: 'no_cache' });
   const rateLimiter = getGraphQLRateLimiter(config);
 

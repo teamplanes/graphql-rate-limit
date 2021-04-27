@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import test from 'ava';
 import { createRateLimitRule } from './rate-limit-shield-rule';
 

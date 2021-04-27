@@ -11,3 +11,4 @@ coverage
 *.log
 
 package-lock.json
+.vscode

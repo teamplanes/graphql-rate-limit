@@ -1,20 +1,20 @@
-const { ApolloServer, gql, makeExecutableSchema } = require('apollo-server');
-const { shield } = require('graphql-shield');
-const { applyMiddleware } = require('graphql-middleware');
-const {
+import { ApolloServer, gql, makeExecutableSchema } from 'apollo-server';
+import { shield } from 'graphql-shield';
+import { applyMiddleware } from 'graphql-middleware';
+import {
   createRateLimitDirective,
   RedisStore,
   getGraphQLRateLimiter,
-  createRateLimitRule
-} = require('graphql-rate-limit');
-const redis = require('redis');
+  createRateLimitRule,
+} from 'graphql-rate-limit';
+import redis from 'redis';
 
 // Option 1: Use a directive (applied in the schema below)
 const rateLimitDirective = createRateLimitDirective({
-  identifyContext: context => {
+  identifyContext: (context) => {
     return context.req.ip;
   },
-  store: new RedisStore(redis.createClient())
+  store: new RedisStore(redis.createClient()),
 });
 
 // Option 2: User graphql-shield (applied in the `shield` below)
@@ -22,18 +22,18 @@ const rateLimit = createRateLimitRule({
   formatError: () => {
     return 'Stop doing that so often.';
   },
-  identifyContext: context => {
+  identifyContext: (context) => {
     return context.req.ip;
-  }
+  },
 });
 
 const permissions = shield({
   Query: {
     myId: rateLimit({
       max: 2,
-      window: '10s'
-    })
-  }
+      window: '10s',
+    }),
+  },
 });
 
 // Option 3: Manually use the rate limiter in resolvers
@@ -41,20 +41,20 @@ const rateLimiter = getGraphQLRateLimiter({
   formatError: () => {
     return 'Stop doing that.';
   },
-  identifyContext: context => {
+  identifyContext: (context) => {
     return context.req.ip;
-  }
+  },
 });
 
 const books = [
   {
     title: 'Harry Potter and the Chamber of Secrets',
-    author: 'J.K. Rowling'
+    author: 'J.K. Rowling',
   },
   {
     title: 'Jurassic Park',
-    author: 'Michael Crichton'
-  }
+    author: 'Michael Crichton',
+  },
 ];
 
 const typeDefs = gql`
@@ -98,7 +98,7 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     books: () => books,
-    myId: () => '1'
+    myId: () => '1',
   },
   Mutation: {
     // This uses the manual rate limiter (Option 3.)
@@ -108,18 +108,18 @@ const resolvers = {
           parent,
           args,
           context,
-          info
+          info,
         },
         {
           max: 2,
-          window: '10s'
+          window: '10s',
         }
       );
       if (errorMessage) throw new Error(errorMessage);
       books[args.id] = {
         ...books[args.id],
         title: args.title || books[args.id].title,
-        author: args.title || books[args.id].author
+        author: args.title || books[args.id].author,
       };
       return books[args.id];
     },
@@ -129,25 +129,26 @@ const resolvers = {
     },
     deleteBooks: () => {
       return books[0];
-    }
-  }
+    },
+  },
 };
 
 const server = new ApolloServer({
-  context: ctx => ctx,
+  context: (ctx) => ctx,
 
   schemaDirectives: {
-    rateLimit: rateLimitDirective
+    rateLimit: rateLimitDirective,
   },
   schema: applyMiddleware(
     makeExecutableSchema({
       typeDefs,
-      resolvers
+      resolvers,
     }),
     permissions
-  )
+  ),
 });
 
 server.listen().then(({ url }) => {
+  // eslint-disable-next-line no-console
   console.log(`🚀  Server ready at ${url}`);
 });

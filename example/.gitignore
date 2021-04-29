@@ -3,7 +3,4 @@ build
 src/**.js
 .idea/*
 *.log
-.yalc
-yalc.lock
-
 package-lock.json

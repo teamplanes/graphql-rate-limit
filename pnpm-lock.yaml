@@ -31,6 +31,7 @@ specifiers:
 
 dependencies:
   '@graphql-tools/utils': 7.6.0_graphql@15.5.0
+  graphql-middleware: 6.0.4_graphql@15.5.0
   graphql-shield: 7.5.0_64bb88f54ca794dd53404244ebc081db
   lodash.get: 4.4.2
   ms: 2.1.3
@@ -51,7 +52,6 @@ devDependencies:
   eslint-plugin-import: 2.22.1_eslint@7.22.0
   eslint-plugin-prettier: 3.3.1_44b94358ac15c7c093df3d5421ccc811
   graphql: 15.5.0
-  graphql-middleware: 6.0.4_graphql@15.5.0
   nyc: 15.1.0
   prettier: 2.2.1
   redis-mock: 0.56.3
@@ -234,6 +234,7 @@ packages:
     resolution: {integrity: sha512-4QPkjJq6Ns3V/RgpEahRk+AGfL0eO6RHHtTWoNNr5mO49G6B5+X6d6THgWEAvTrznU5xYpbAlVKRYcsCgh/Akw==}
     dependencies:
       regenerator-runtime: 0.13.7
+    dev: false
 
   /@babel/template/7.12.13:
     resolution: {integrity: sha512-/7xxiGA57xMo/P2GVvdEumr8ONhFOhfgq2ihK3h1e6THqzTAkHbkXgB0xI9yeTfIUoH3+oAeHhqm/I43OTbbjA==}
@@ -301,7 +302,7 @@ packages:
       graphql: 15.5.0
       is-promise: 4.0.0
       tslib: 2.0.3
-    dev: true
+    dev: false
 
   /@graphql-tools/delegate/7.0.10_graphql@15.5.0:
     resolution: {integrity: sha512-6Di9ia5ohoDvrHuhj2cak1nJGhIefJmUsd3WKZcJ2nu2yZAFawWMxGvQImqv3N7iyaWKiVhrrK8Roi/JrYhdKg==}
@@ -316,7 +317,7 @@ packages:
       graphql: 15.5.0
       is-promise: 4.0.0
       tslib: 2.1.0
-    dev: true
+    dev: false
 
   /@graphql-tools/schema/7.1.3_graphql@15.5.0:
     resolution: {integrity: sha512-ZY76hmcJlF1iyg3Im0sQ3ASRkiShjgv102vLTVcH22lEGJeCaCyyS/GF1eUHom418S60bS8Th6+autRUxfBiBg==}
@@ -326,7 +327,6 @@ packages:
       '@graphql-tools/utils': 7.6.0_graphql@15.5.0
       graphql: 15.5.0
       tslib: 2.1.0
-    dev: true
 
   /@graphql-tools/utils/7.6.0_graphql@15.5.0:
     resolution: {integrity: sha512-YCZDDdhfb4Yhie0IH031eGdvQG8C73apDuNg6lqBNbauNw45OG/b8wi3+vuMiDnJTJN32GQUb1Gt9gxDKoRDKw==}
@@ -1422,7 +1422,7 @@ packages:
 
   /dataloader/2.0.0:
     resolution: {integrity: sha512-YzhyDAwA4TaQIhM5go+vCLmU0UikghC/t9DTQYZR2M/UvZ1MdOhPezSDZcjj9uqQJOMqjLcpWtyW2iNINdlatQ==}
-    dev: true
+    dev: false
 
   /date-fns/2.19.0:
     resolution: {integrity: sha512-X3bf2iTPgCAQp9wvjOQytnf5vO5rESYRXlPIVcgSbtT5OTScPcsf9eZU+B/YIkKAtYr5WeCii58BgATrNitlWg==}
@@ -2261,7 +2261,7 @@ packages:
       '@graphql-tools/delegate': 7.0.10_graphql@15.5.0
       '@graphql-tools/schema': 7.1.3_graphql@15.5.0
       graphql: 15.5.0
-    dev: true
+    dev: false
 
   /graphql-shield/7.5.0_64bb88f54ca794dd53404244ebc081db:
     resolution: {integrity: sha512-T1A6OreOe/dHDk/1Qg3AHCrKLmTkDJ3fPFGYpSOmUbYXyDnjubK4J5ab5FjHdKHK5fWQRZNTvA0SrBObYsyfaw==}
@@ -2605,7 +2605,6 @@ packages:
 
   /is-promise/4.0.0:
     resolution: {integrity: sha512-hvpoI6korhJMnej285dSg6nu1+e6uxs7zG3BYAm5byqDsgJNWwxzM6z6iZiAgQR4TJ30JmBTOwqZUw3WlyH3AQ==}
-    dev: true
 
   /is-regex/1.1.2:
     resolution: {integrity: sha512-axvdhb5pdhEVThqJzYXwMlVuZwC+FF2DpcOhTS+y/8jVq4trxyPgfcwIxIKiyeuLlSQYKkmUaPQJ8ZE4yNKXDg==}
@@ -2914,6 +2913,7 @@ packages:
 
   /lodash-es/4.17.21:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+    dev: false
 
   /lodash.flattendeep/4.4.0:
     resolution: {integrity: sha1-+wMJF/hqMTTlvJvsDWngAT3f7bI=}
@@ -3683,6 +3683,7 @@ packages:
 
   /property-expr/2.0.4:
     resolution: {integrity: sha512-sFPkHQjVKheDNnPvotjQmm3KD3uk1fWKUN7CrpdbwmUx3CrG3QiM8QpTSimvig5vTXmTvjz7+TDvXOI9+4rkcg==}
+    dev: false
 
   /pump/3.0.0:
     resolution: {integrity: sha512-LwZy+p3SFs1Pytd/jYct4wpv49HiYCqd9Rlc5ZVdk0V+8Yzv6jR5Blk3TRmPL1ft69TxP0IMZGJ+WPFU2BFhww==}
@@ -3855,6 +3856,7 @@ packages:
 
   /regenerator-runtime/0.13.7:
     resolution: {integrity: sha512-a54FxoJDIr27pgf7IgeQGxmqUNYrcV338lf/6gH456HZ/PhX+5BcwHXG9ajESmwe6WRO0tAzRUrRmNONWgkrew==}
+    dev: false
 
   /regexpp/3.1.0:
     resolution: {integrity: sha512-ZOIzd8yVsQQA7j8GCSlPGXwg5PfmA1mrq0JP4nGhh54LaKN3xdai/vHUDu74pKwV8OxseMS65u2NImosQcSD0Q==}
@@ -4408,6 +4410,7 @@ packages:
 
   /toposort/2.0.2:
     resolution: {integrity: sha1-riF2gXXRVZ1IvvNUILL0li8JwzA=}
+    dev: false
 
   /tree-kill/1.2.2:
     resolution: {integrity: sha512-L0Orpi8qGpRG//Nd+H90vFB+3iHnue1zSSGmNOOCh1GLJ7rUKVwV2HvijphGQS2UmhUZewS9VgvxYIdgr+fG1A==}

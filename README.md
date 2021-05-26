@@ -1,3 +1,4 @@
+
 <h1 align="center">💂‍♀️ GraphQL Rate Limit 💂‍♂️</h1>
 
 <p align="center">
@@ -16,6 +17,7 @@ A GraphQL Rate Limiter to add basic but granular rate limiting to your Queries o
 - 💼 Custom stores, use Redis, Postgres, Mongo... it defaults to in-memory
 - 💪 Written in TypeScript
 
+
 ## Install
 
 ```sh
@@ -30,38 +32,31 @@ yarn add graphql-rate-limit
 import { createRateLimitDirective } from 'graphql-rate-limit';
 
 // Step 1: get rate limit directive instance
-const rateLimitDirective = createRateLimitDirective({
-  identifyContext: (ctx) => ctx.id,
-});
+const rateLimitDirective = createRateLimitDirective({ identifyContext: (ctx) => ctx.id });
 
 const schema = makeExecutableSchema({
   schemaDirectives: {
-    rateLimit: rateLimitDirective,
+    rateLimit: rateLimitDirective
   },
   resolvers: {
     Query: {
-      getItems: () => [{ id: '1' }],
-    },
+      getItems: () => [{ id: '1' }]
+    }
   },
   typeDefs: gql`
     directive @rateLimit(
-      max: Int
-      window: String
-      message: String
-      identityArgs: [String]
+      max: Int,
+      window: String,
+      message: String,
+      identityArgs: [String],
       arrayLengthField: String
     ) on FIELD_DEFINITION
 
     type Query {
       # Step 2: Apply the rate limit instance to the field with config
-      getItems: [Item]
-        @rateLimit(
-          window: "1s"
-          max: 5
-          message: "You are doing that too often."
-        )
+      getItems: [Item] @rateLimit(window: "1s", max: 5, message: "You are doing that too often.")
     }
-  `,
+  `
 });
 ```
 
@@ -76,8 +71,8 @@ const rateLimitRule = createRateLimitRule({ identifyContext: (ctx) => ctx.id });
 const permissions = shield({
   Query: {
     // Step 2: Apply the rate limit rule instance to the field with config
-    getItems: rateLimitRule({ window: '1s', max: 5 }),
-  },
+    getItems: rateLimitRule({ window: "1s", max: 5 })
+  }
 });
 
 const schema = applyMiddleware(
@@ -89,12 +84,12 @@ const schema = applyMiddleware(
     `,
     resolvers: {
       Query: {
-        getItems: () => [{ id: '1' }],
-      },
-    },
+        getItems: () => [{ id: '1' }]
+      }
+    }
   }),
   permissions
-);
+)
 ```
 
 #### Option 3: Using the base rate limiter function
@@ -120,11 +115,11 @@ const schema = makeExecutableSchema({
           { max: 5, window: '10s' }
         );
         if (errorMessage) throw new Error(errorMessage);
-        return [{ id: '1' }];
-      },
-    },
-  },
-});
+        return [{ id: '1' }]
+      }
+    }
+  }
+})
 ```
 
 ## Configuration
@@ -142,15 +137,16 @@ And so... we have the same 'Instance Config' and 'Field Config' options which ev
 A required key and used to identify the user/client. The most likely cases are either using the context's request.ip, or the user ID on the context. A function that accepts the context and returns a string that is used to identify the user.
 
 ```js
-identifyContext: (ctx) => ctx.user.id;
+identifyContext: (ctx) => ctx.user.id
 ```
 
 #### `store`
 
 An optional key as it defaults to an InMemoryStore. See the implementation of InMemoryStore if you'd like to implement your own with your own database.
 
+
 ```js
-store: new MyCustomStore();
+store: new MyCustomStore()
 ```
 
 #### `formatError`
@@ -158,24 +154,15 @@ store: new MyCustomStore();
 Generate a custom error message. Note that the `message` passed in to the field config will be used if its set.
 
 ```js
-formatError: ({ fieldName }) =>
-  `Woah there, you are doing way too much ${fieldName}`;
-```
-
-#### `createError`
-
-Generate a custom error. By default, a [`RateLimitError`](https://github.com/teamplanes/graphql-rate-limit/blob/master/src/lib/rate-limit-error.ts) instance is created when a request is blocked. To return an instance of a different error class, you can return your own error using this field.
-
-```js
-createError: (message: string) => new ApolloError(message, '429');
+formatError: ({ fieldName }) => `Woah there, you are doing way too much ${fieldName}`
 ```
 
 #### `enableBatchRequestCache`
 
-This enables a per-request synchronous cache to properly rate limit batch queries. Defaults to `false` to preserve backwards compatibility.
+This enables a per-request synchronous cache to properly rate limit batch queries. Defaults to `false` to preserve backwards compatibility. 
 
 ```js
-enableBatchRequestCache: false | true;
+enableBatchRequestCache: false | true
 ```
 
 ### Field Config
@@ -200,6 +187,7 @@ A custom message per field. Note you can also use `formatError` to customise the
 
 Limit calls to the field, using the length of the array as the number of calls to the field.
 
+
 ## Redis Store Usage
 
 It is recommended to use a persistent store rather than the default InMemoryStore. GraphQLRateLimit currently supports Redis as an alternative. You'll need to install Redis in your project first.
@@ -208,10 +196,10 @@ It is recommended to use a persistent store rather than the default InMemoryStor
 import { createRateLimitDirective, RedisStore } from 'graphql-rate-limit';
 
 const GraphQLRateLimit = createRateLimitDirective({
-  identifyContext: (ctx) => ctx.user.id,
+  identifyContext: ctx => ctx.user.id,
   /**
    * Import the class from graphql-rate-limit and pass in an instance of redis client to the constructor
    */
-  store: new RedisStore(redis.createClient()),
+  store: new RedisStore(redis.createClient())
 });
 ```

@@ -29,7 +29,14 @@ const createRateLimitRule = (
         },
         fieldConfig
       );
-      return errorMessage ? new RateLimitError(errorMessage) : true;
+
+      if (errorMessage) {
+        return config.createError
+          ? config.createError(errorMessage)
+          : new RateLimitError(errorMessage);
+      }
+
+      return true;
     });
 };
 

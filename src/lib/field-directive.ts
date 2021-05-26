@@ -66,7 +66,9 @@ const createRateLimitDirective = (
         );
 
         if (errorMessage) {
-          throw new RateLimitError(errorMessage);
+          throw customConfig.createError
+            ? customConfig.createError(errorMessage)
+            : new RateLimitError(errorMessage);
         }
 
         return resolve(parent, args, context, info);

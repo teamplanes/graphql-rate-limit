@@ -157,6 +157,15 @@ Generate a custom error message. Note that the `message` passed in to the field 
 formatError: ({ fieldName }) => `Woah there, you are doing way too much ${fieldName}`
 ```
 
+
+#### `createError`
+
+Generate a custom error. By default, a [`RateLimitError`](https://github.com/teamplanes/graphql-rate-limit/blob/master/src/lib/rate-limit-error.ts) instance is created when a request is blocked. To return an instance of a different error class, you can return your own error using this field.
+
+```js
+createError: (message: string) => new ApolloError(message, '429');
+```
+
 #### `enableBatchRequestCache`
 
 This enables a per-request synchronous cache to properly rate limit batch queries. Defaults to `false` to preserve backwards compatibility. 

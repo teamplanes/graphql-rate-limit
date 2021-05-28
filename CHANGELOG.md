@@ -1,5 +1,9 @@
 # Changelog
 
+### [3.1.0](https://github.com/teamplanes/graphql-rate-limit/pull/183) (2021-05-28)
+
+Adds the create error config function.
+
 ### [3.0.0](https://github.com/teamplanes/graphql-rate-limit/commit/df3837f4002d0f15c30f6ef4ef4e4a23e18d271b) (2021-04-29)
 
 Removes `graphql-middleware` as a dependency, and adds it as a peer dependency.

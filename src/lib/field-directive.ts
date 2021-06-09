@@ -1,6 +1,7 @@
 import {
   defaultFieldResolver,
   DirectiveLocation,
+  GraphQLBoolean,
   GraphQLDirective,
   GraphQLField,
   GraphQLInt,
@@ -42,6 +43,9 @@ const createRateLimitDirective = (
           },
           window: {
             type: GraphQLString,
+          },
+          uncountRejected: {
+            type: GraphQLBoolean,
           },
         },
         locations: [DirectiveLocation.FIELD_DEFINITION],

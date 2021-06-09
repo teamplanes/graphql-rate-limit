@@ -157,8 +157,10 @@ const getGraphQLRateLimiter = (
       }),
     ];
 
+    const limitReached = filteredAccessTimestamps.length > maxCalls;
+
     // Save these access timestamps for future requests.
-    if (!readOnly) {
+    if (!readOnly && limitReached) {
       await store.setForIdentity(identity, filteredAccessTimestamps, windowMs);
     }
 
@@ -174,9 +176,7 @@ const getGraphQLRateLimiter = (
       });
 
     // Returns an error message or undefined if no error
-    return filteredAccessTimestamps.length > maxCalls
-      ? errorMessage
-      : undefined;
+    return limitReached ? errorMessage : undefined;
   };
 
   return rateLimiter;

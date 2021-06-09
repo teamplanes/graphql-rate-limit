@@ -8,6 +8,10 @@ import {
 import { InMemoryStore } from './in-memory-store';
 import { GraphQLRateLimitDirectiveArgs } from './types';
 
+const sleep = (ms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
 test('getFieldIdentity with no identity args', (t) => {
   t.is(getFieldIdentity('myField', [], {}), 'myField');
   t.is(getFieldIdentity('random', [], {}), 'random');
@@ -112,9 +116,30 @@ test('getGraphQLRateLimiter timestamps should expire', async (t) => {
     await rateLimit(field, config),
     `You are trying to access 'myField' too often`
   );
-  setTimeout(async () => {
-    t.falsy(await rateLimit(field, config));
-  }, 500);
+  await sleep(500);
+  t.falsy(await rateLimit(field, config));
+});
+
+test('getGraphQLRateLimiter uncountRejected should ignore rejections', async (t) => {
+  const rateLimit = getGraphQLRateLimiter({
+    store: new InMemoryStore(),
+    identifyContext: (context) => context.id,
+  });
+  const config = { max: 1, window: '1s', uncountRejected: true };
+  const field = {
+    parent: {},
+    args: {},
+    context: { id: '1' },
+    info: ({ fieldName: 'myField' } as any) as GraphQLResolveInfo,
+  };
+  t.falsy(await rateLimit(field, config));
+  await sleep(500);
+  t.is(
+    await rateLimit(field, config),
+    `You are trying to access 'myField' too often`
+  );
+  await sleep(500);
+  t.falsy(await rateLimit(field, config));
 });
 
 test('getGraphQLRateLimiter should limit by callCount if arrayLengthField is passed', async (t) => {

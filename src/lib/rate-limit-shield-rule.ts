@@ -15,11 +15,10 @@ import { RateLimitError } from './rate-limit-error';
 const createRateLimitRule = (
   config: GraphQLRateLimitConfig
 ): ((fieldConfig: GraphQLRateLimitDirectiveArgs) => IRule) => {
-  const noCacheRule = rule({ cache: 'no_cache' });
   const rateLimiter = getGraphQLRateLimiter(config);
 
   return (fieldConfig: GraphQLRateLimitDirectiveArgs) =>
-    noCacheRule(async (parent, args, context, info) => {
+    rule({ cache: 'no_cache' })(async (parent, args, context, info) => {
       const errorMessage = await rateLimiter(
         {
           parent,

@@ -1,11 +1,11 @@
 {
-  "name": "graphql-rate-limit",
+  "name": "@opendoor/graphql-rate-limit",
   "version": "3.1.0",
   "description": "Add Rate Limiting To Your GraphQL Resolvers 💂‍♀",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "module": "build/esm/index.js",
-  "repository": "https://github.com/teamplanes/graphql-rate-limit",
+  "repository": "https://github.com/opendoor-labs/graphql-rate-limit",
   "license": "MIT",
   "keywords": [],
   "scripts": {

@@ -1,5 +1,5 @@
 {
-  "name": "graphql-rate-limit",
+  "name": "@opendoor/graphql-rate-limit",
   "version": "3.1.0",
   "description": "Add Rate Limiting To Your GraphQL Resolvers 💂‍♀",
   "main": "dist/index.js",

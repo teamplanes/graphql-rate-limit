@@ -62,6 +62,7 @@ const getGraphQLRateLimiter = (
     max,
     window,
     message,
+    uncountRejected,
   }: GraphQLRateLimitDirectiveArgs
 ) => Promise<string | undefined>) => {
   // Default directive config
@@ -113,6 +114,7 @@ const getGraphQLRateLimiter = (
       window,
       message,
       readOnly,
+      uncountRejected,
     }: GraphQLRateLimitDirectiveArgs
   ): Promise<string | undefined> => {
     // Identify the user or client on the context
@@ -146,20 +148,27 @@ const getGraphQLRateLimiter = (
       newTimestamps,
     });
 
-    // Fetch timestamps from previous requests out of the store.
-    const accessTimestamps = await store.getForIdentity(identity);
+    // Fetch timestamps from previous requests out of the store
+    // and get all the timestamps that haven't expired
+    const filteredAccessTimestamps = (
+      await store.getForIdentity(identity)
+    ).filter((t) => {
+      return t + windowMs > Date.now();
+    });
 
-    // Get all the timestamps that haven't expired
-    const filteredAccessTimestamps: readonly any[] = [
-      ...batchedTimestamps,
-      ...accessTimestamps.filter((t) => {
-        return t + windowMs > Date.now();
-      }),
+    // Flag indicating requests limit reached
+    const limitReached =
+      filteredAccessTimestamps.length + batchedTimestamps.length > maxCalls;
+
+    // Confogure access timestamps to save according to uncountRejected setting
+    const timestampsToStore: readonly any[] = [
+      ...filteredAccessTimestamps,
+      ...(!uncountRejected || !limitReached ? batchedTimestamps : []),
     ];
 
     // Save these access timestamps for future requests.
     if (!readOnly) {
-      await store.setForIdentity(identity, filteredAccessTimestamps, windowMs);
+      await store.setForIdentity(identity, timestampsToStore, windowMs);
     }
 
     // Field level custom message or a global formatting function
@@ -174,9 +183,7 @@ const getGraphQLRateLimiter = (
       });
 
     // Returns an error message or undefined if no error
-    return filteredAccessTimestamps.length > maxCalls
-      ? errorMessage
-      : undefined;
+    return limitReached ? errorMessage : undefined;
   };
 
   return rateLimiter;

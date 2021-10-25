@@ -55,6 +55,10 @@ export interface GraphQLRateLimitDirectiveArgs {
    * This can be useful for example when you only wanna rate limit on failed attempts.
    */
   readonly readOnly?: boolean;
+  /**
+   * Prevents rejected requests (due to limit reach) from being counted.
+   */
+  readonly uncountRejected?: boolean;
 }
 
 /**

@@ -124,7 +124,7 @@ const schema = makeExecutableSchema({
 
 ## Configuration
 
-You'll notice that each usage example has two steps, step 1 we get an instace of a rate limiter and step 2 we apply the rate limit to one or more fields. When creating the initial instance we pass 'Instance Config' (e.g. `identifyContext` or a `store` instance), this instance will likely be the only instance you'd create for your entire GraphQL backend and can be applied to multiple fields.
+You'll notice that each usage example has two steps, step 1 we get an instance of a rate limiter and step 2 we apply the rate limit to one or more fields. When creating the initial instance we pass 'Instance Config' (e.g. `identifyContext` or a `store` instance), this instance will likely be the only instance you'd create for your entire GraphQL backend and can be applied to multiple fields.
 
 Once you have your rate limiting instance you'll apply it to all the fields that require rate limiting, at this point you'll pass field level rate limiting config (e.g. `window` and `max`).
 
